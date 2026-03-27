@@ -1,0 +1,41 @@
+# -------------------------------------------------------------------
+# NutriVision Unified Requirements
+# -------------------------------------------------------------------
+
+# Core Deep Learning & Qwen3-VL
+torch>=2.1.0
+torchvision>=0.16.0
+transformers>=4.36.0
+accelerate>=0.26.0
+bitsandbytes>=0.40.0
+peft>=0.5.0
+
+# Vision & Image Processing
+opencv-python>=4.8.0
+Pillow>=10.0.0
+scikit-image>=0.21.0
+
+# Segmentation
+# Notice: Detectron2 must be installed via git due to its build system!
+# git+https://github.com/facebookresearch/detectron2.git
+
+# Data & Machine Learning Utilities
+numpy>=1.24.0
+pandas>=2.1.0
+scikit-learn>=1.3.0
+pyyaml>=5.4.1
+
+# Web Interface & Visualisation
+gradio>=4.0.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# Notebooks & Developer Extras
+jupyter>=1.0.0
+ipython>=8.16.0
+tqdm>=4.65.0
+h5py>=3.9.0
+joblib>=1.4.0
+tensorboard>=2.13.0
+pydantic>=2.5.0

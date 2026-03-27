@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Build / packaging
+*.egg-info/
+dist/
+build/
+
+# Local runtime artifacts
+*.log
+
+# Large or local-only project artifacts
+mobile/
+data/
+checkpoints/
+
+# Keep lightweight docs/reports while ignoring checkpoint payloads
+!checkpoints/**/*.md
