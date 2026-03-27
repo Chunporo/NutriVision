@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NutriVision - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body { font-family: 'Public Sans', sans-serif; background-color: #F7F9F6; color: #1A2E2C; }
+      .macro-card { 
+        background: white; 
+        border-radius: 28px; 
+        border: 1px solid rgba(0,0,0,0.04); 
+        box-shadow: 0 4px 20px -2px rgba(0,0,0,0.03); 
+      }
+      .floating-nav { background: #1A2E2C; border-radius: 40px; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.3); }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col overflow-x-hidden relative">
+    <header class="p-6 pb-2">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-4">
+          <div class="size-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
+             <img id="header-avatar" src="https://ui-avatars.com/api/?name=User&background=8FAE83&color=fff" />
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest" id="header-date">Tuesday, Oct 24</span>
+            <h1 class="text-lg font-bold leading-tight text-slate-900" id="header-greeting">Good morning, Alex</h1>
+          </div>
+        </div>
+        <button class="size-10 flex items-center justify-center rounded-full bg-white shadow-sm border border-slate-100 text-slate-500" onclick="toggleCalendar()">
+          <i data-lucide="calendar" class="size-5"></i>
+        </button>
+      </div>
+
+      <!-- Calendar Day Strip (Hidden by default or used for switching) -->
+      <div id="calendar-strip" class="flex justify-between items-center py-2 overflow-x-auto gap-2 no-scrollbar scroll-smooth">
+         <div class="flex flex-col items-center min-w-[42px] py-3 rounded-2xl bg-white text-slate-400 border border-slate-50">
+           <span class="text-[8px] font-bold uppercase mb-1">Mon</span>
+           <span class="text-xs font-bold">23</span>
+         </div>
+         <div class="flex flex-col items-center min-w-[42px] py-3 rounded-2xl bg-[#8FAE83] text-white shadow-md shadow-[#8FAE83]/20">
+           <span class="text-[8px] font-bold uppercase mb-1">Tue</span>
+           <span class="text-xs font-bold">24</span>
+         </div>
+         <div class="flex flex-col items-center min-w-[42px] py-3 rounded-2xl bg-white text-slate-400 border border-slate-50">
+           <span class="text-[8px] font-bold uppercase mb-1">Wed</span>
+           <span class="text-xs font-bold">25</span>
+         </div>
+         <div class="flex flex-col items-center min-w-[42px] py-3 rounded-2xl bg-white text-slate-400 border border-slate-50">
+           <span class="text-[8px] font-bold uppercase mb-1">Thu</span>
+           <span class="text-xs font-bold">26</span>
+         </div>
+         <div class="flex flex-col items-center min-w-[42px] py-3 rounded-2xl bg-white text-slate-400 border border-slate-50">
+           <span class="text-[8px] font-bold uppercase mb-1">Fri</span>
+           <span class="text-xs font-bold">27</span>
+         </div>
+         <div class="flex flex-col items-center min-w-[42px] py-3 rounded-2xl bg-white text-slate-400 border border-slate-50">
+           <span class="text-[8px] font-bold uppercase mb-1">Sat</span>
+           <span class="text-xs font-bold">28</span>
+         </div>
+         <div class="flex flex-col items-center min-w-[42px] py-3 rounded-2xl bg-white text-slate-400 border border-slate-50">
+           <span class="text-[8px] font-bold uppercase mb-1">Sun</span>
+           <span class="text-xs font-bold">29</span>
+         </div>
+      </div>
+    </header>
+
+    <main class="flex-1 px-6 pb-28">
+      <!-- Calories Full-width Progress -->
+      <section class="mb-6">
+        <div class="macro-card p-6 flex flex-col items-center justify-center relative overflow-hidden" style="background-color: #F1F8EE;">
+          <div class="relative flex items-center justify-center">
+            <svg class="w-48 h-24" viewBox="0 0 100 50">
+              <path d="M 10,50 A 40,40 0 0 1 90,50" fill="none" stroke="#E2E8F0" stroke-width="8" stroke-linecap="round" />
+              <path id="cal-progress-path" d="M 10,50 A 40,40 0 0 1 70,18" fill="none" stroke="#8FAE83" stroke-width="8" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="text-center -mt-2">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Calories</p>
+            <h3 class="text-4xl font-bold text-[#1A2E2C]" id="cal-current">1,739<span class="text-sm font-normal text-slate-500 ml-1">kcal</span></h3>
+            <p class="text-xs text-slate-400 mt-1" id="cal-total-text">of 2,450 kcal goal</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Macros Grid -->
+      <section class="grid grid-cols-3 gap-3 mb-8">
+        <!-- Protein -->
+        <div class="macro-card p-4">
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Protein</p>
+          <div class="flex items-baseline gap-1">
+            <span class="text-xl font-bold text-[#1A2E2C]" id="pro-current">86</span>
+            <span class="text-[10px] text-slate-500">g</span>
+          </div>
+          <div class="w-full h-1 bg-slate-100 rounded-full mt-2 overflow-hidden">
+            <div id="pro-bar" class="h-full" style="width: 60%; background-color: #A78BFA;"></div>
+          </div>
+        </div>
+        <!-- Carbs -->
+        <div class="macro-card p-4">
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Carbs</p>
+          <div class="flex items-baseline gap-1">
+            <span class="text-xl font-bold text-[#1A2E2C]" id="car-current">212</span>
+            <span class="text-[10px] text-slate-500">g</span>
+          </div>
+          <div class="w-full h-1 bg-slate-100 rounded-full mt-2 overflow-hidden">
+            <div id="car-bar" class="h-full" style="width: 75%; background-color: #FB923C;"></div>
+          </div>
+        </div>
+        <!-- Fat -->
+        <div class="macro-card p-4">
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Fat</p>
+          <div class="flex items-baseline gap-1">
+            <span class="text-xl font-bold text-[#1A2E2C]" id="fat-current">94</span>
+            <span class="text-[10px] text-slate-500">g</span>
+          </div>
+          <div class="w-full h-1 bg-slate-100 rounded-full mt-2 overflow-hidden">
+            <div id="fat-bar" class="h-full" style="width: 81%; background-color: #0EA5E9;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Today's Log -->
+      <section>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-slate-900">Today's Log</h3>
+          <button class="text-sm font-semibold text-[#8FAE83]" onclick="location.href='meals.html'">View All</button>
+        </div>
+        <div class="space-y-3" id="log-container">
+           <!-- Dynamic Entries Linked to JSON -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Navigation -->
+    <nav class="fixed bottom-6 left-6 right-6 floating-nav p-1 z-50 rounded-2xl">
+      <div class="flex items-center justify-around relative">
+        <a class="flex flex-col items-center justify-center p-1.5 relative text-[#8FAE83]" href="#">
+          <i data-lucide="home" class="size-5"></i>
+          <div class="absolute -bottom-1 w-4 h-0.5 bg-[#8FAE83] rounded-full shadow-[0_4px_12px_rgba(143,174,131,0.6)]"></div>
+        </a>
+        <a class="flex flex-col items-center justify-center p-1.5 text-slate-500" href="meals.html"><i data-lucide="scroll-text" class="size-5"></i></a>
+        <div class="relative"><button class="size-11 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all" style="background: #8FAE83;" onclick="location.href='food-scan.html'"><i data-lucide="aperture" class="size-6 text-white"></i></button></div>
+        <a class="flex flex-col items-center justify-center p-1.5 text-slate-500" href="insights.html"><i data-lucide="pie-chart" class="size-5"></i></a>
+        <a class="flex flex-col items-center justify-center p-1.5 text-slate-500" href="profile.html"><i data-lucide="user" class="size-5"></i></a>
+      </div>
+    </nav>
+
+    <script src="db.js"></script>
+    <script src="router.js"></script>
+    <script>
+      lucide.createIcons();
+
+      function loadDashboard() {
+        const data = DB.get();
+        
+        // Setup User
+        document.getElementById('header-greeting').innerText = `Good morning, ${data.user.name.split(' ')[0]}`;
+        document.getElementById('cal-total-text').innerText = `of ${data.goals.cal} kcal goal`;
+        document.getElementById('cal-current').innerHTML = `${data.logs.reduce((acc, l) => acc + l.kcal, 0)}<span class="text-sm font-normal text-slate-500 ml-1">kcal</span>`;
+        
+        // Setup Logs
+        const logContainer = document.getElementById('log-container');
+        logContainer.innerHTML = '';
+        data.logs.slice(0, 3).forEach(log => {
+           logContainer.innerHTML += `
+             <a href="food-detail.html" class="flex items-center gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm active:scale-[0.98] transition-all">
+                <div class="size-14 rounded-2xl bg-[#F8FAFC] flex items-center justify-center text-2xl shadow-sm">${log.icon}</div>
+                <div class="flex-1 leading-tight"><h4 class="font-bold text-slate-800">${log.name}</h4></div>
+                <div class="text-right">
+                  <p class="text-sm font-bold text-slate-700">${log.kcal} <span class="text-[10px] font-normal text-slate-400">kcal</span></p>
+                  <p class="text-[10px] font-medium text-slate-400">${log.time}</p>
+                </div>
+             </a>
+           `;
+        });
+      }
+      loadDashboard();
+    </script>
+  </body>
+</html>

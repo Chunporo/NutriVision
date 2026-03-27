@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NutriVision - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body { font-family: 'Public Sans', sans-serif; background-color: #F7F9F6; }
+      .input-field {
+        background-color: #F1F5F9;
+        transition: all 0.2s;
+      }
+      .input-field:focus-within {
+        background-color: white;
+        box-shadow: 0 0 0 2px #0F766E;
+      }
+      .error-state {
+        background-color: #FEE2E2 !important;
+        border: 2px solid #EF4444 !important;
+      }
+    </style>
+  </head>
+  <body class="h-screen flex flex-col p-6">
+    <!-- Header -->
+    <header class="py-4">
+      <a href="onboarding-3.html" class="size-12 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-100 text-slate-800">
+        <i data-lucide="chevron-left" class="size-6"></i>
+      </a>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 flex flex-col pt-12">
+      <div class="mb-10 flex flex-col items-center text-center">
+        <h1 class="text-3xl font-bold text-[#1A2E2C] mb-2">Welcome Back 👋</h1>
+        <p class="text-slate-500">Hi there, you’ve been missed</p>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Email -->
+        <div class="input-field rounded-3xl p-4 flex items-center gap-3">
+          <input type="email" placeholder="Email" class="flex-1 bg-transparent outline-none text-slate-800 placeholder-slate-400" value="samantha123@email.com">
+          <i data-lucide="mail" class="size-5 text-[#0F766E]"></i>
+        </div>
+
+        <!-- Password -->
+        <div id="password-container" class="input-field rounded-3xl p-4 flex items-center gap-3">
+          <input type="password" placeholder="Password" class="flex-1 bg-transparent outline-none text-slate-800 placeholder-slate-400" value="••••••••">
+          <i data-lucide="lock" class="size-5 text-[#0F766E]"></i>
+        </div>
+        
+        <!-- Error Message (Hidden by default) -->
+        <p id="error-text" class="text-xs text-red-500 font-medium px-4 hidden">*Password is incorrect</p>
+
+        <div class="flex justify-center pt-2">
+          <button class="text-sm font-semibold text-slate-600">Forgot password?</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-10">
+      <button onclick="toggleError()" class="w-full h-16 rounded-[2rem] bg-[#1A2E2C] text-white flex items-center justify-between px-8 shadow-xl active:scale-95 transition-all">
+        <span class="text-lg font-bold">Login</span>
+        <i data-lucide="chevron-right" class="size-6"></i>
+      </button>
+      
+      <p class="text-center text-sm text-slate-400 mt-6">
+        Don’t have an account? <span class="text-[#0F766E] font-bold">Sign Up</span>
+      </p>
+    </footer>
+
+    <script src="router.js"></script>
+    <script>
+      lucide.createIcons();
+      
+      function toggleError() {
+        const container = document.getElementById('password-container');
+        const text = document.getElementById('error-text');
+        const isError = container.classList.contains('error-state');
+        
+        if (isError) {
+          container.classList.remove('error-state');
+          text.classList.add('hidden');
+        } else {
+          container.classList.add('error-state');
+          text.classList.remove('hidden');
+        }
+      }
+    </script>
+  </body>
+</html>

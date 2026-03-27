@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NutriVision - Add Food</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body { font-family: 'Public Sans', sans-serif; background-color: #F7F9F6; color: #1A2E2C; }
+      
+      /* Remove Spinners (Inc/Dec) for Numbers */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type=number] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
+
+      .input-card {
+        background: white;
+        border-radius: 28px;
+        padding: 24px;
+        border: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 4px 20px -2px rgba(0,0,0,0.03);
+      }
+
+      .num-input {
+        background: transparent;
+        border: none;
+        font-weight: 700;
+        text-align: right;
+        width: 100px;
+        outline: none;
+        padding: 0;
+        font-size: 28px;
+      }
+
+      .save-btn {
+        background: #1A2E2C;
+        color: white;
+        border-radius: 28px;
+        padding: 24px;
+        font-weight: 700;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 10px 40px -10px rgba(0,0,0,0.3);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col p-6 overflow-x-hidden relative">
+    <!-- Header -->
+    <header class="py-4 flex items-center justify-between">
+      <a href="javascript:history.back()" class="size-12 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-100 text-slate-800">
+        <i data-lucide="chevron-left" class="size-6"></i>
+      </a>
+      <h1 class="text-xl font-bold">Add Food</h1>
+      <button class="size-12 rounded-full bg-[#8FAE83] text-white flex items-center justify-center shadow-lg shadow-[#8FAE83]/30" onclick="saveNewMeal()">
+        <i data-lucide="check" class="size-6"></i>
+      </button>
+    </header>
+
+    <main class="flex-1 space-y-6 mt-6 pb-10">
+      
+      <!-- Image Capture Placeholder -->
+      <div class="w-full aspect-video rounded-3xl overflow-hidden shadow-sm relative bg-[#1A2E2C]/5 border-2 border-dashed border-[#1A2E2C]/10 flex flex-col items-center justify-center gap-3 cursor-pointer active:bg-[#1A2E2C]/10 transition-all">
+         <div class="flex gap-4">
+            <div class="size-14 rounded-full bg-white flex items-center justify-center shadow-sm text-[#1A2E2C]">
+               <i data-lucide="camera" class="size-6"></i>
+            </div>
+            <div class="size-14 rounded-full bg-white flex items-center justify-center shadow-sm text-[#1A2E2C]">
+               <i data-lucide="image" class="size-6"></i>
+            </div>
+         </div>
+         <span class="text-xs font-bold text-[#1A2E2C]">Add or Capture Food Photo</span>
+         <!-- Preview Image (Initially hidden) -->
+         <img id="image-preview" src="#" class="hidden absolute inset-0 w-full h-full object-cover">
+      </div>
+
+      <!-- Food Info -->
+      <section class="space-y-4">
+        <div class="input-card">
+           <p class="text-[10px] font-bold text-slate-400 tracking-widest mb-1">Meal Name</p>
+           <input type="text" id="meal-name" placeholder="E.g. Chicken Caesar" class="w-full text-xl font-bold bg-transparent border-none outline-none text-[#1A2E2C]">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="input-card">
+             <p class="text-[10px] font-bold text-slate-400 tracking-widest mb-1">Weight</p>
+             <div class="flex items-baseline gap-1">
+                <input type="number" id="meal-weight" value="250" class="w-full text-xl font-bold bg-transparent border-none outline-none text-[#1A2E2C]">
+                <span class="text-xs text-slate-400 font-medium">g</span>
+             </div>
+          </div>
+          <div class="input-card">
+             <p class="text-[10px] font-bold text-slate-400 tracking-widest mb-1">Time</p>
+             <input type="time" id="meal-time" class="w-full text-xl font-bold bg-transparent border-none outline-none text-[#1A2E2C]">
+          </div>
+        </div>
+      </section>
+
+      <!-- Nutritional Data -->
+      <section class="space-y-3">
+         <h3 class="text-sm font-bold text-slate-400 px-2">Nutritional Data</h3>
+         
+         <div class="input-card py-6 flex items-center justify-between">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Calories</p>
+            <div class="flex items-baseline gap-1" style="color: #8FAE83;">
+              <input type="number" id="meal-cal" value="350" class="num-input">
+              <span class="text-xs font-normal text-slate-400">kcal</span>
+            </div>
+         </div>
+
+         <div class="input-card py-6 flex items-center justify-between">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Protein</p>
+            <div class="flex items-baseline gap-1" style="color: #A78BFA;">
+              <input type="number" id="meal-pro" value="24" class="num-input">
+              <span class="text-xs font-normal text-slate-400">g</span>
+            </div>
+         </div>
+
+         <div class="input-card py-6 flex items-center justify-between">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Carbs</p>
+            <div class="flex items-baseline gap-1" style="color: #FB923C;">
+              <input type="number" id="meal-car" value="45" class="num-input">
+              <span class="text-xs font-normal text-slate-400">g</span>
+            </div>
+         </div>
+
+         <div class="input-card py-6 flex items-center justify-between">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Fat</p>
+            <div class="flex items-baseline gap-1" style="color: #0EA5E9;">
+              <input type="number" id="meal-fat" value="12" class="num-input">
+              <span class="text-xs font-normal text-slate-400">g</span>
+            </div>
+         </div>
+      </section>
+
+      <div class="pt-4">
+         <button class="save-btn font-bold uppercase tracking-widest" onclick="saveNewMeal()">
+            <span>Record Food</span>
+            <i data-lucide="arrow-right" class="size-5"></i>
+         </button>
+      </div>
+
+    </main>
+
+    <script src="db.js"></script>
+    <script>
+      lucide.createIcons();
+
+      // Default current time
+      const now = new Date();
+      document.getElementById('meal-time').value = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+      function saveNewMeal() {
+        const name = document.getElementById('meal-name').value;
+        const kcal = parseInt(document.getElementById('meal-cal').value);
+        if (!name || isNaN(kcal)) {
+           alert('Please enter a name and calories');
+           return;
+        }
+
+        const rawTime = document.getElementById('meal-time').value;
+        const [h, m] = rawTime.split(':');
+        const period = h >= 12 ? 'pm' : 'am';
+        const displayH = h % 12 || 12;
+        const timeStr = `${displayH}:${m} ${period}`;
+
+        DB.addLog({
+           name: name,
+           kcal: kcal,
+           icon: '🍱', // In a real app this would store image data/URL
+           time: timeStr
+        });
+
+        location.href = 'home.html';
+      }
+    </script>
+  </body>
+</html>

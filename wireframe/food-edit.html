@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NutriVision - Edit Meal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body { font-family: 'Public Sans', sans-serif; background-color: #F7F9F6; color: #1A2E2C; }
+      
+      /* Remove Spinners (Inc/Dec) for Numbers */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type=number] {
+        -moz-appearance: textfield;
+      }
+
+      .input-card {
+        background: white;
+        border-radius: 28px;
+        padding: 24px;
+        border: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 4px 20px -2px rgba(0,0,0,0.03);
+      }
+
+      /* Macro Num Inputs */
+      .num-input {
+        background: transparent;
+        border: none;
+        font-weight: 700;
+        text-align: right;
+        width: 100px;
+        outline: none;
+        padding: 0;
+        font-size: 28px;
+      }
+
+    </style>
+  </head>
+  <body class="h-screen flex flex-col p-6 overflow-x-hidden">
+    <!-- Header -->
+    <header class="flex justify-between items-center py-4 px-2">
+      <a href="javascript:history.back()" class="size-12 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-100 text-slate-800">
+        <i data-lucide="chevron-left" class="size-6"></i>
+      </a>
+      <h1 class="text-xl font-bold">Edit Meal</h1>
+      <a href="food-detail.html" class="size-12 rounded-full bg-[#8FAE83] text-white flex items-center justify-center shadow-lg shadow-[#8FAE83]/30 active:scale-95 transition-all">
+        <i data-lucide="check" class="size-6"></i>
+      </a>
+    </header>
+
+    <main class="flex-1 mt-6 space-y-6 pb-20 overflow-y-auto px-1">
+      <!-- Image Preview -->
+      <div class="w-full aspect-video rounded-3xl overflow-hidden shadow-sm relative group">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1azyRQeUW5SMjZSD_eD72rHLn3SoanU51l7TIg4zfUp8jrQyju8dvtj6M5r9zYBYxjhCqD4a-IsysbVNtDuI73jGYFvaRgUSrlto29ilTtK0yqHJxc1zd7YoGvYNQYshZHfZEUjnSw4x1GYlTrhohEQTU2j-1wFLFUBgX_gByiphI7VqO8B7j66vItzZsW4p0GGv6bltvEoxOJdSp7ljujslP-0ZFX90aUFakqPwFAgSztTlvcupfbj1BEOoLoMEwYbP-NFnurihO" class="w-full h-full object-cover brightness-75">
+        <div class="absolute inset-0 flex items-center justify-center">
+           <button class="px-6 py-3 rounded-full bg-white/30 backdrop-blur-md text-white border border-white/40 font-bold">
+              Change Photo
+           </button>
+        </div>
+      </div>
+
+      <!-- Basic Info -->
+      <div class="space-y-4">
+        <div class="input-card">
+           <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Meal Name</p>
+           <input type="text" value="Avocado Toast" class="w-full text-xl font-bold bg-transparent border-none outline-none text-[#1A2E2C]">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="input-card">
+             <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Weight</p>
+             <div class="flex items-baseline gap-1">
+                <input type="number" value="62" class="w-full text-xl font-bold bg-transparent border-none outline-none text-[#1A2E2C]">
+                <span class="text-xs text-slate-400 font-medium">g</span>
+             </div>
+          </div>
+          <div class="input-card">
+             <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Time</p>
+             <input type="time" value="08:30" class="w-full text-xl font-bold bg-transparent border-none outline-none text-[#1A2E2C]">
+          </div>
+        </div>
+      </div>
+
+      <!-- Nutritional Inputs (No Sliders) -->
+      <section class="space-y-3">
+        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest px-2">Nutritional Data</h3>
+        
+        <!-- Calories -->
+        <div class="input-card py-6 flex items-center justify-between">
+           <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Calories</p>
+           <div class="flex items-baseline gap-1" style="color: #8FAE83;">
+             <input type="number" value="320" class="num-input">
+             <span class="text-xs font-normal text-slate-400">kcal</span>
+           </div>
+        </div>
+
+        <!-- Protein -->
+        <div class="input-card py-6 flex items-center justify-between">
+           <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Protein</p>
+           <div class="flex items-baseline gap-1" style="color: #A78BFA;">
+             <input type="number" value="12" class="num-input">
+             <span class="text-xs font-normal text-slate-400">g</span>
+           </div>
+        </div>
+
+        <!-- Carbs -->
+        <div class="input-card py-6 flex items-center justify-between">
+           <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Carbohydrates</p>
+           <div class="flex items-baseline gap-1" style="color: #FB923C;">
+             <input type="number" value="42" class="num-input">
+             <span class="text-xs font-normal text-slate-400">g</span>
+           </div>
+        </div>
+
+        <!-- Fat -->
+        <div class="input-card py-6 flex items-center justify-between">
+           <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Fat</p>
+           <div class="flex items-baseline gap-1" style="color: #0EA5E9;">
+             <input type="number" value="18" class="num-input">
+             <span class="text-xs font-normal text-slate-400">g</span>
+           </div>
+        </div>
+      </section>
+
+      <!-- Delete Button (With Icon) -->
+      <button class="w-full py-8 text-red-500 font-bold uppercase tracking-widest text-xs active:opacity-60 transition-opacity flex items-center justify-center gap-2">
+         <i data-lucide="trash-2" class="size-4"></i>
+         Discard Log
+      </button>
+    </main>
+
+    <script src="router.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

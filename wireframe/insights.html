@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NutriVision - Insights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body { font-family: 'Public Sans', sans-serif; background-color: #F7F9F6; color: #1A2E2C; }
+      .insight-card {
+        background: white;
+        border-radius: 28px;
+        padding: 24px;
+        border: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 4px 20px -2px rgba(0,0,0,0.03);
+      }
+      .trend-bar-container {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        height: 120px;
+        padding: 8px;
+      }
+      .trend-bar-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+      }
+      .trend-bar {
+        width: 14px;
+        border-radius: 8px;
+        background: #F1F5F9;
+        position: relative;
+        overflow: hidden;
+        height: 100px;
+      }
+      .trend-fill {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        border-radius: 8px;
+        transition: height 0.6s ease, background-color 0.4s ease;
+      }
+      .floating-nav {
+        background: #1A2E2C;
+        border-radius: 40px;
+        box-shadow: 0 10px 30px -5px rgba(0,0,0,0.3);
+      }
+      .tab-active {
+        background: #1A2E2C;
+        color: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+      .tab-inactive {
+        background: white;
+        color: #94A3B8;
+        border: 1px solid rgba(0,0,0,0.05);
+      }
+      .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+      /* Macro Progress Styling for General Tab */
+      .macro-progress-container {
+        height: 8px;
+        background: #F1F5F9;
+        border-radius: 4px;
+        margin-top: 10px;
+        overflow: hidden;
+      }
+      .macro-progress-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.8s ease;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col p-6 overflow-x-hidden relative">
+    <!-- Header -->
+    <header class="p-6 flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-slate-900">Your Insights</h1>
+      <button class="size-10 flex items-center justify-center rounded-full bg-white shadow-sm border border-slate-100 text-slate-500">
+        <i data-lucide="calendar" class="size-5"></i>
+      </button>
+    </header>
+    <p class="text-sm text-slate-400 font-medium tracking-tight">Weekly Patterns</p>
+
+    <!-- Tabs Navigation -->
+    <nav class="mt-4 flex gap-2 overflow-x-auto pb-4 scrollbar-hide px-1">
+      <button id="tab-btn-gen" class="px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap tab-active" onclick="switchTheme('gen')">General</button>
+      <button id="tab-btn-cal" class="px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap tab-inactive" onclick="switchTheme('cal')">Calories</button>
+      <button id="tab-btn-pro" class="px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap tab-inactive" onclick="switchTheme('pro')">Protein</button>
+      <button id="tab-btn-car" class="px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap tab-inactive" onclick="switchTheme('car')">Carbs</button>
+      <button id="tab-btn-fat" class="px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap tab-inactive" onclick="switchTheme('fat')">Fat</button>
+    </nav>
+
+    <main class="flex-1 space-y-6 mt-2 pb-28">
+      
+      <!-- Dynamic Chart Holder -->
+      <section id="chart-section" class="insight-card">
+         <!-- This will be replaced by JS for General vs Specific -->
+         <div id="chart-inner-content">
+            <!-- Initial General Content -->
+            <div class="flex justify-between items-center mb-8">
+               <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Macro Goal Balance</h3>
+               <span class="text-xs font-bold text-[#8FAE83]">85% CONSISTENT</span>
+            </div>
+            
+            <div class="space-y-6">
+               <!-- Calories Progress -->
+               <div class="space-y-1">
+                  <div class="flex justify-between text-sm font-bold">
+                     <span>Calories</span>
+                     <span>2,142 / 2,450 <span class="text-[10px] text-slate-400 font-normal">kcal</span></span>
+                  </div>
+                  <div class="macro-progress-container"><div class="macro-progress-fill" style="width: 87%; background-color: #8FAE83;"></div></div>
+               </div>
+               <!-- Protein Progress -->
+               <div class="space-y-1">
+                  <div class="flex justify-between text-sm font-bold">
+                     <span>Protein</span>
+                     <span>128 / 145 <span class="text-[10px] text-slate-400 font-normal">g</span></span>
+                  </div>
+                  <div class="macro-progress-container"><div class="macro-progress-fill" style="width: 88%; background-color: #A78BFA;"></div></div>
+               </div>
+               <!-- Carbs Progress -->
+               <div class="space-y-1">
+                  <div class="flex justify-between text-sm font-bold">
+                     <span>Carbs</span>
+                     <span>245 / 280 <span class="text-[10px] text-slate-400 font-normal">g</span></span>
+                  </div>
+                  <div class="macro-progress-container"><div class="macro-progress-fill" style="width: 87%; background-color: #FB923C;"></div></div>
+               </div>
+               <!-- Fat Progress -->
+               <div class="space-y-1">
+                  <div class="flex justify-between text-sm font-bold">
+                     <span>Fat</span>
+                     <span>64 / 75 <span class="text-[10px] text-slate-400 font-normal">g</span></span>
+                  </div>
+                  <div class="macro-progress-container"><div class="macro-progress-fill" style="width: 85%; background-color: #0EA5E9;"></div></div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <!-- Context Info Area -->
+      <div id="info-section">
+         <section class="insight-card border-l-4 border-l-[#8FAE83] flex gap-4">
+           <div class="size-12 rounded-2xl bg-[#8FAE83]/10 flex items-center justify-center text-[#8FAE83]"><i data-lucide="zap" class="size-6"></i></div>
+           <div>
+             <h4 class="text-sm font-bold">Protein consistency is up</h4>
+             <p class="text-xs text-slate-500 mt-1">You reached 90% of your target 5 days this week.</p>
+           </div>
+         </section>
+      </div>
+
+    </main>
+
+    <!-- Floating Bottom Navigation Bar -->
+    <nav class="fixed bottom-6 left-6 right-6 floating-nav p-1 z-50 rounded-2xl">
+      <div class="flex items-center justify-around relative">
+        <a class="flex flex-col items-center justify-center p-1.5 text-slate-500" href="home.html"><i data-lucide="home" class="size-5"></i></a>
+        <a class="flex flex-col items-center justify-center p-1.5 text-slate-500" href="meals.html"><i data-lucide="scroll-text" class="size-5"></i></a>
+        <div class="relative">
+          <button class="size-11 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95 shadow-md" style="background: #8FAE83; box-shadow: 0 4px 12px -2px rgba(143,174,131,0.5);">
+            <i data-lucide="aperture" class="size-6 text-white"></i>
+          </button>
+        </div>
+        <a class="flex flex-col items-center justify-center p-1.5 relative text-[#8FAE83]" href="insights.html">
+          <i data-lucide="pie-chart" class="size-5"></i>
+          <div class="absolute -bottom-1 w-4 h-0.5 bg-[#8FAE83] rounded-full shadow-[0_4px_12px_rgba(143,174,131,0.6)]"></div>
+        </a>
+        <a class="flex flex-col items-center justify-center p-1.5 text-slate-500" href="profile.html"><i data-lucide="user" class="size-5"></i></a>
+      </div>
+    </nav>
+
+    <script src="router.js"></script>
+    <script>
+      lucide.createIcons();
+
+      const themeData = {
+        'gen': { color: '#8FAE83', title: 'Macro Goal Balance', avg: '85% Consistent' },
+        'cal': { color: '#8FAE83', title: 'Daily Calories', avg: '2,142' },
+        'pro': { color: '#A78BFA', title: 'Daily Protein', avg: '128' },
+        'car': { color: '#FB923C', title: 'Daily Carbs', avg: '245' },
+        'fat': { color: '#0EA5E9', title: 'Daily Fat', avg: '64' }
+      };
+
+      function switchTheme(id) {
+         // Update tabs styles
+         document.querySelectorAll('nav button').forEach(btn => {
+            btn.className = 'px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap tab-inactive';
+         });
+         document.getElementById(`tab-btn-${id}`).className = 'px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap tab-active';
+
+         const container = document.getElementById('chart-inner-content');
+         const theme = themeData[id];
+
+         if (id === 'gen') {
+            // Restore General View (Macro Balance Bars)
+            container.innerHTML = `
+               <div class="flex justify-between items-center mb-8">
+                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">${theme.title}</h3>
+                  <span class="text-xs font-bold text-[#8FAE83]">${theme.avg}</span>
+               </div>
+               <div class="space-y-6">
+                  ${renderMacroBar('Calories', '2,142 / 2,450', 'kcal', '87', '#8FAE83')}
+                  ${renderMacroBar('Protein', '128 / 145', 'g', '88', '#A78BFA')}
+                  ${renderMacroBar('Carbs', '245 / 280', 'g', '87', '#FB923C')}
+                  ${renderMacroBar('Fat', '64 / 75', 'g', '85', '#0EA5E9')}
+               </div>
+            `;
+         } else {
+            // Restore Specific View (7-Day Bar Chart)
+            container.innerHTML = `
+               <div class="flex justify-between items-center mb-6">
+                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">${theme.title} Trend</h3>
+                  <span class="text-lg font-bold">${theme.avg} <span class="text-[10px] opacity-40">avg</span></span>
+               </div>
+               <div class="trend-bar-container">
+                  ${['MON','TUE','WED','THU','FRI','SAT','SUN'].map((day, i) => `
+                    <div class="trend-bar-col">
+                      <div class="trend-bar">
+                        <div class="trend-fill" style="height: ${30 + Math.random() * 60}%; background-color: ${day === 'WED' ? theme.color : '#E2E8F0'};"></div>
+                      </div>
+                      <span class="text-[10px] font-bold text-slate-400">${day}</span>
+                    </div>
+                  `).join('')}
+               </div>
+            `;
+         }
+      }
+
+      function renderMacroBar(name, val, unit, pct, color) {
+         return `
+            <div class="space-y-1">
+               <div class="flex justify-between text-sm font-bold">
+                  <span>${name}</span>
+                  <span>${val} <span class="text-[10px] text-slate-400 font-normal">${unit}</span></span>
+               </div>
+               <div class="macro-progress-container"><div class="macro-progress-fill" style="width: ${pct}%; background-color: ${color};"></div></div>
+            </div>
+         `;
+      }
+    </script>
+  </body>
+</html>

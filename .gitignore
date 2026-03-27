@@ -1,0 +1,12 @@
+backend/.env
+backend/nutrivision.db
+backend/.venv/
+backend/__pycache__/
+backend/.pytest_cache/
+backend/.ruff_cache/
+
+nutrivision-mobile/.env
+nutrivision-mobile/.env.local
+.ruff_cache
+.agents
+node_modules
