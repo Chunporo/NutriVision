@@ -1,0 +1,267 @@
+═══════════════════════════════════════════════════════════════════════════════
+NutriVision Mobile App — UX/CODE AUDIT SUMMARY
+═══════════════════════════════════════════════════════════════════════════════
+
+REPORT: /home/aoi/Projects/nutri_vision/plans/reports/Explore-260330-0934-nutri-vision-mobile-audit.md
+LENGTH: 693 lines | CODEBASE: 3,406 LOC | EXAMINED: All major files
+
+───────────────────────────────────────────────────────────────────────────────
+QUICK VERDICT
+───────────────────────────────────────────────────────────────────────────────
+
+Codebase Health:        🟢 GOOD (Well-structured, typed, readable)
+UX Completeness:        🟡 GOOD (Core flows work, needs polish)
+Error Handling:         🟡 PARTIAL (Screens ok, services weak)
+API Robustness:         🟡 WEAK (No retry, no dedup, basic errors)
+Storage Safety:         🟡 RISKY (No offline queue, fragile cache)
+Accessibility:          🟢 GOOD (Labels present, untested)
+Performance:            🟢 GOOD (No bottlenecks found)
+Internationalization:   🔴 NONE (Hardcoded English)
+
+───────────────────────────────────────────────────────────────────────────────
+SCREENS ANALYZED (6 SCREENS)
+───────────────────────────────────────────────────────────────────────────────
+
+1. HOME SCREEN (391 LOC)
+   ✅ Animated circular gauge, staggered macros, pull-to-refresh
+   ⚠️ Missing loading state on first load, no empty state for "no meals today"
+   🔴 Hard-coded daily goal (should load from settings first)
+
+2. CAMERA SCREEN (344 LOC)
+   ✅ State machine, error recovery, image compression, haptic feedback
+   🔴 Analyzing overlay is misleading (no "uploading" step, makes slow networks feel broken)
+   🔴 No progress indication for image upload, 120s timeout is too long
+
+3. RESULTS SCREEN (346 LOC)
+   ✅ Animated calorie counter, macro breakdown, success/warning banners
+   🔴 No "save to favorites", "edit nutrition", or "share" options
+
+4. HISTORY SCREEN (309 LOC)
+   ✅ Great empty state, swipe-to-delete, date grouping, accessibility
+   🔴 No search/filter, no export/backup, no pagination for 200+ meals
+
+5. DETAILS SCREEN (364 LOC)
+   ✅ Complete nutritional breakdown, skeleton loader, metadata badges
+   ⚠️ Long lists could benefit from virtualization
+
+6. SETTINGS SCREEN (263 LOC)
+   ✅ Server connection test with live status, helpful hints
+   ⚠️ Status doesn't persist across navigation, weak goal validation
+
+───────────────────────────────────────────────────────────────────────────────
+TOP 6 CRITICAL ISSUES (By Impact)
+───────────────────────────────────────────────────────────────────────────────
+
+🔴 #1: NO OFFLINE MODE / PENDING UPLOAD QUEUE
+    If user captures meal offline, it's lost. No data recovery.
+    Impact: HIGH (data loss risk) | Effort: HIGH
+    
+🔴 #2: NO RETRY LOGIC IN API SERVICE
+    Transient errors (timeout, network blip) require manual user retry.
+    Impact: HIGH (poor UX on flaky networks) | Effort: MEDIUM
+    
+🔴 #3: HOME SCREEN NO LOADING STATE ON FIRST LOAD
+    App shows empty "0 calories" while data loads — bad perceived performance.
+    Impact: MEDIUM (affects app perception) | Effort: LOW
+    
+🔴 #4: ANALYZING OVERLAY IS MISLEADING
+    Shows progress steps but doesn't show "uploading" — users think it's slow.
+    Actually: 15s upload time + 5s analysis = 20s, but UI suggests instant.
+    Impact: MEDIUM (confuses users) | Effort: LOW
+    
+🔴 #5: NO ERROR HANDLING IN STORAGE.PERSIST()
+    If AsyncStorage fails (out of space, corruption), data loss is silent.
+    Impact: MEDIUM (rare but catastrophic) | Effort: MEDIUM
+    
+🔴 #6: CACHE INVALIDATION FRAGILE
+    User captures meal → goes to Home → meal not visible for 1-2s.
+    Home's useFocusEffect doesn't know cache is stale.
+    Impact: MEDIUM (perceived UI lag) | Effort: LOW
+
+───────────────────────────────────────────────────────────────────────────────
+MISSING COMMON FEATURES (Expected in Food Tracking Apps)
+───────────────────────────────────────────────────────────────────────────────
+
+NOT IMPLEMENTED:
+  ❌ Offline mode (capture meal, sync when online)
+  ❌ Search/filter history by date or food type
+  ❌ Export/backup meal data to CSV or cloud
+  ❌ Edit nutrition / adjust portions
+  ❌ Weekly/monthly nutrition summaries & trends
+  ❌ Share results with friends/doctors
+  ❌ Milestone notifications (goal reached)
+  ❌ Data sync across devices
+
+PARTIALLY IMPLEMENTED:
+  ⚠️ Error handling (screens ok, services basic)
+  ⚠️ Loading states (Details has skeleton, Home missing)
+  ⚠️ Empty states (History great, Home missing)
+  ⚠️ Retry UI (Camera can retry, Results can't)
+
+WELL IMPLEMENTED:
+  ✅ Haptic feedback (button presses, success/error)
+  ✅ Animations (macro cards, calorie counter, gauge)
+  ✅ Accessibility (labels, roles, semantic)
+  ✅ Skeleton loader with shimmer
+  ✅ Pull-to-refresh (Home only)
+
+───────────────────────────────────────────────────────────────────────────────
+CODE QUALITY INSIGHTS
+───────────────────────────────────────────────────────────────────────────────
+
+STRENGTHS:
+  ✅ Full TypeScript with proper interfaces (NutritionData, MealEntry)
+  ✅ Excellent inline comments (circular gauge, VL field extraction)
+  ✅ Unified design tokens (colors, spacing, elevation, typography)
+  ✅ No external UI library bloat (React Native + Reanimated only)
+  ✅ Clear separation: services, utils, components
+  ✅ Good accessibility foundation (labels, roles)
+
+ISSUES:
+  🔴 Inline components should be extracted (MacroCard, ActionButton, MacroRow)
+  🔴 Duplicate field extraction logic (extractCalories, extractMacros)
+  🔴 Limited error context (plain Error objects, no metadata)
+  🔴 useFocusEffect pattern repeated 4x — should be custom hook
+  🔴 No request deduplication or rate limiting in API
+  🔴 Cache not validated on concurrent modifications
+
+WORST SMELL:
+  Hardcoded English strings everywhere (no i18n setup for future translation)
+
+───────────────────────────────────────────────────────────────────────────────
+COMPONENT INVENTORY (What's Reusable, What's Duplicated)
+───────────────────────────────────────────────────────────────────────────────
+
+REUSABLE COMPONENTS:
+  ✅ CircularCalorieGauge (home screen)
+  ✅ SkeletonLoader (details screen)
+  ✅ AnalyzingOverlay (camera screen)
+
+MISSING COMPONENTS (Currently Inline):
+  ❌ ErrorCard / ErrorBanner (duplicated in camera.tsx)
+  ❌ EmptyStateView (only History has it)
+  ❌ LoadingStateView (duplicated in results.tsx)
+  ❌ MacroCard (inline in home screen)
+  ❌ Button variants (Primary/secondary defined inline everywhere)
+  ❌ PillBadge (date headers, stats pills)
+
+───────────────────────────────────────────────────────────────────────────────
+ACTIONABLE ROADMAP (3 Phases)
+───────────────────────────────────────────────────────────────────────────────
+
+PHASE 1: CRITICAL FIXES (1–2 weeks)
+  □ Add skeleton loader to Home screen first load
+  □ Implement retry logic (exponential backoff) in API service
+  □ Add try-catch to storage.persist()
+  □ Fix analyzing overlay to show "uploading" step
+  □ Add error boundaries & toast notifications
+
+PHASE 2: UX ENHANCEMENTS (2–3 weeks)
+  □ Extract reusable button/card/error components
+  □ Add offline queue for meal captures
+  □ Implement search/filter on History
+  □ Add data export/backup
+  □ Add empty state to Home ("start tracking today")
+
+PHASE 3: FEATURE EXPANSION (3–4 weeks)
+  □ Weekly/monthly nutrition summary
+  □ Meal notes & portion editing
+  □ Cloud sync with backend
+  □ Share/export results
+  □ Nutrition trends & insights
+
+───────────────────────────────────────────────────────────────────────────────
+FILES EXAMINED (15 files)
+───────────────────────────────────────────────────────────────────────────────
+
+Screens (6):
+  • app/_layout.tsx (65 LOC) — Root navigation setup
+  • app/(tabs)/_layout.tsx (45 LOC) — Tab navigation
+  • app/(tabs)/index.tsx (391 LOC) — Home screen ★
+  • app/(tabs)/history.tsx (309 LOC) — History screen ★
+  • app/camera.tsx (344 LOC) — Camera capture ★
+  • app/results.tsx (346 LOC) — Results display ★
+  • app/details.tsx (364 LOC) — Full nutrition details ★
+  • app/settings.tsx (263 LOC) — Configuration ★
+  • app/+not-found.tsx (65 LOC) — 404 page
+
+Services (2):
+  • src/services/api.ts (233 LOC) — FastAPI client ★
+  • src/services/storage.ts (179 LOC) — AsyncStorage wrapper ★
+
+Utils (3):
+  • src/utils/theme.ts (183 LOC) — Design tokens ★
+  • src/utils/helpers.ts (229 LOC) — Formatters & extractors ★
+  • src/utils/image-compression.ts (30 LOC) — Image optimization ★
+
+Components (5):
+  • src/components/circular-calorie-gauge.tsx (112 LOC) — Ring gauge ★
+  • src/components/skeleton-loader.tsx (116 LOC) — Shimmer loader ★
+  • src/components/analyzing-overlay.tsx (65 LOC) — Analysis feedback
+  • src/components/animated-progress-bar.tsx (67 LOC) — (not detailed)
+  • (+ inline components in screens)
+
+★ = Detailed analysis provided
+
+───────────────────────────────────────────────────────────────────────────────
+SPECIFIC FILE/LINE REFERENCES (Top Issues)
+───────────────────────────────────────────────────────────────────────────────
+
+1. Home screen missing skeleton on load:
+   app/(tabs)/index.tsx:49–96 (loadData + useFocusEffect)
+   ISSUE: Shows empty state while fetching, no spinner
+   FIX: Wrap content in {loading ? <SkeletonLoader /> : <Content />}
+
+2. API service lacks retry logic:
+   src/services/api.ts:156–191 (analyzeFood method)
+   ISSUE: Transient errors propagate immediately
+   FIX: Wrap in exponential backoff (1s, 3s, 10s retries)
+
+3. Analyzing overlay doesn't show upload step:
+   src/components/analyzing-overlay.tsx:13–20 (hardcoded steps)
+   ISSUE: "Uploading..." is missing, confuses users
+   FIX: Add first step "Uploading image..." (duration varies)
+
+4. Storage.persist() has no error handling:
+   src/services/storage.ts:66–69 (persist method)
+   ISSUE: AsyncStorage errors are silent
+   FIX: Try-catch + return error to caller
+
+5. Home screen daily goal is stale:
+   app/(tabs)/index.tsx:53 (setDailyGoal(2000))
+   ISSUE: Default 2000 until loadData() completes
+   FIX: Move setDailyGoal outside of separate useEffect
+
+6. History screen no search:
+   app/(tabs)/history.tsx:1–309 (entire file)
+   ISSUE: Can't find "that pasta dish from last Tuesday"
+   FIX: Add TextInput with date/text filtering above FlatList
+
+───────────────────────────────────────────────────────────────────────────────
+METRICS & STATS
+───────────────────────────────────────────────────────────────────────────────
+
+Total Lines of Code:        3,406
+Number of Files Reviewed:   15
+Number of Screens:          6
+Number of Services:         2
+Number of Components:       5 (4 reusable, 1+ inline)
+Number of Utilities:        3
+
+Critical Issues Found:      6
+High-Priority Fixes:        6
+Medium-Priority Fixes:      6
+Low-Priority Polish:        6
+
+Total Effort (to address all):
+  Critical Fixes:           ~2 weeks
+  UX Enhancements:          ~2 weeks
+  Feature Expansion:        ~4 weeks
+  Polish & Scale:           Ongoing
+
+───────────────────────────────────────────────────────────────────────────────
+
+For detailed line-by-line analysis, see the full report:
+  Explore-260330-0934-nutri-vision-mobile-audit.md
+
+═══════════════════════════════════════════════════════════════════════════════
