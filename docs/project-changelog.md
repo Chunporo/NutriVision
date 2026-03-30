@@ -6,6 +6,18 @@ All notable changes to NutriVision are documented here. This file tracks feature
 
 ## [Unreleased]
 
+### Model Evaluation Notebook — Complete
+**Comprehensive Evaluation Notebook** (2026-03-27)
+
+#### Added
+- **Model Evaluation Notebook** — Created `notebooks/model_evaluation.ipynb` with 6-section Jupyter evaluation notebook
+  - Section 1: Setup & imports with path resolution and device detection
+  - Section 2: ViT training analysis (loss curves, accuracy curves, hyperparameter table)
+  - Section 3: ViT Food-101 classifier evaluation (top-1/top-5 accuracy metrics, per-class accuracy bar chart, 10×10 confusion matrix for most-confused classes, 4×4 grid of correct/incorrect predictions)
+  - Section 4: Mask R-CNN segmentation review (≥5 test images with overlay masks, detection rate stats, pixel-to-gram conversion)
+  - Section 5: End-to-end pipeline benchmarking (3 diverse test images, full result display with food name/confidence/segments/weight/kcal, per-stage latency breakdown)
+  - Section 6: Summary metrics table and key findings
+
 ### Training Pipeline Improvements — In Progress
 **Training Enhancements** (2026-03-27)
 

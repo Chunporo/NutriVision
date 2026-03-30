@@ -1,0 +1,41 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{1. Introduction \& Project Overview}{1}{Doc-Start}%
+\contentsline {subsection}{\numberline {0.1}Motivation}{1}{subsection.0.1}%
+\contentsline {subsection}{\numberline {0.2}Project Scope}{2}{subsection.0.2}%
+\contentsline {subsection}{\numberline {0.3}Contribution Summary}{2}{subsection.0.3}%
+\contentsline {section}{\numberline {1}2. Related Work}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Food Classification}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Instance Segmentation \& Portion Estimation}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Commercial Systems}{2}{subsection.1.3}%
+\contentsline {section}{\numberline {2}3. Dataset \& EDA}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Food-101 Dataset}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}CalorieDB — Nutritional Lookup Table}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}EDA Highlights}{2}{subsection.2.3}%
+\contentsline {section}{\numberline {3}4. System Architecture}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Three-Stage Pipeline}{3}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Stage 1: ViT Classification}{3}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Stage 2: Mask R-CNN Segmentation}{3}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Stage 3: CalorieDB Lookup \& Aggregation}{3}{subsubsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.2}Backend API}{3}{subsection.3.2}%
+\contentsline {section}{\numberline {4}5. Model Training}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Architecture}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Hyperparameters}{3}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Data Augmentation}{3}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Training Dynamics}{3}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Critical Bug: num\_labels Misconfiguration}{4}{subsection.4.5}%
+\contentsline {section}{\numberline {5}6. Evaluation Results}{4}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Top-1 / Top-5 Accuracy}{4}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Per-Class Analysis}{4}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Comparison with Baselines}{5}{subsection.5.3}%
+\contentsline {section}{\numberline {6}7. Pipeline Integration}{5}{section.6}%
+\contentsline {subsection}{\numberline {6.1}End-to-End Flow}{5}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Latency Breakdown}{5}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Caching Strategy}{5}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}FastAPI Integration}{5}{subsection.6.4}%
+\contentsline {section}{\numberline {7}8. Limitations \& Future Work}{5}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Current Limitations}{5}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Future Work}{5}{subsection.7.2}%
+\contentsline {section}{\numberline {8}9. Conclusion}{6}{section.8}%
+\contentsline {section}{Acknowledgments}{6}{section*.13}%
+\contentsline {section}{References}{6}{section*.14}%
+\contentsfinish 

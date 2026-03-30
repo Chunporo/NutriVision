@@ -20,6 +20,7 @@ from main import (
     MAX_IMAGE_DIMENSION,
     AnalysisMode,
     QuickAnalysisResponse,
+    _image_cache,
     _parse_vl_response,
     _read_and_validate_image,
     app,
@@ -86,6 +87,9 @@ class TestHealth:
 # /analyze/quick
 # ---------------------------------------------------------------------------
 class TestAnalyzeQuick:
+    def setup_method(self):
+        """Clear image cache before each test to avoid cross-test cache hits."""
+        _image_cache.clear()
     @patch("main._analyze_vl", return_value=MOCK_VL_RESULT)
     def test_quick_analysis_jpeg(self, mock_vl: MagicMock):
         data = _make_jpeg_bytes()
@@ -276,3 +280,70 @@ class TestCORS:
         )
         # Should not reject CORS
         assert resp.status_code in (200, 204, 405)
+
+
+# ---------------------------------------------------------------------------
+# Image cache
+# ---------------------------------------------------------------------------
+class TestImageCache:
+    def setup_method(self):
+        """Clear cache before each test."""
+        _image_cache.clear()
+
+    @patch("main._analyze_vl", return_value=MOCK_VL_RESULT)
+    def test_cache_miss_then_hit(self, mock_vl: MagicMock):
+        """Second identical upload should be served from cache (mock not called again)."""
+        data = _make_jpeg_bytes()
+
+        # First request — cache miss, inference runs
+        resp1 = client.post(
+            "/analyze/quick",
+            files={"image": ("food.jpg", data, "image/jpeg")},
+        )
+        assert resp1.status_code == 200
+        mock_vl.assert_called_once()
+
+        # Second identical request — cache hit, inference skipped
+        resp2 = client.post(
+            "/analyze/quick",
+            files={"image": ("food.jpg", data, "image/jpeg")},
+        )
+        assert resp2.status_code == 200
+        assert resp2.json()["nutrition"]["food_name"] == "Caesar Salad"
+        # Mock should still have been called only once
+        mock_vl.assert_called_once()
+
+    @patch("main._analyze_vl", return_value=MOCK_VL_RESULT)
+    def test_different_images_not_cached(self, mock_vl: MagicMock):
+        """Different images produce distinct cache entries."""
+        data_a = _make_jpeg_bytes(100, 100)
+        data_b = _make_jpeg_bytes(200, 200)
+
+        client.post("/analyze/quick", files={"image": ("a.jpg", data_a, "image/jpeg")})
+        client.post("/analyze/quick", files={"image": ("b.jpg", data_b, "image/jpeg")})
+
+        assert mock_vl.call_count == 2
+
+    def test_cache_stats_endpoint(self):
+        """GET /cache/stats returns expected fields."""
+        resp = client.get("/cache/stats")
+        assert resp.status_code == 200
+        body = resp.json()
+        assert "hits" in body
+        assert "misses" in body
+        assert "size" in body
+        assert "max_size" in body
+        assert body["max_size"] == 100
+
+    @patch("main._analyze_vl", return_value=MOCK_VL_RESULT)
+    def test_cache_stats_increment(self, mock_vl: MagicMock):
+        """Stats correctly track hits and misses."""
+        data = _make_jpeg_bytes()
+
+        client.post("/analyze/quick", files={"image": ("food.jpg", data, "image/jpeg")})
+        client.post("/analyze/quick", files={"image": ("food.jpg", data, "image/jpeg")})
+
+        stats = client.get("/cache/stats").json()
+        assert stats["misses"] == 1
+        assert stats["hits"] == 1
+        assert stats["size"] == 1

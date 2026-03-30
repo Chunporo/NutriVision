@@ -13,6 +13,7 @@ Project phases, milestones, and current progress tracking.
 | **Phase 3: Mobile Features** | ✅ Complete | 100% | Camera, gallery, history, settings, results screen |
 | **Phase 4: Mobile UX Polish** | ✅ Complete | 100% | Animations, haptic feedback, gestures, loading states |
 | **Phase 4.5: Training Pipeline Improvements** | 🔄 In Progress | ~90% | Resume support, checkpoint serialization, modularization |
+| **Phase 4.6: Model Evaluation** | ✅ Complete | 100% | Comprehensive evaluation notebook, metrics visualization |
 | **Phase 5: Testing & Documentation** | 📋 Planned | 0% | Unit tests, integration tests, deployment guides |
 | **Phase 6: Optimization & Scale** | 📋 Planned | 0% | Performance tuning, caching, offline mode |
 
@@ -156,6 +157,44 @@ Project phases, milestones, and current progress tracking.
 - Complete 10-epoch training run
 - Validate checkpoint loading in inference pipeline
 - Document training best practices
+
+---
+
+## Phase 4.6: Model Evaluation ✅ (Complete — 2026-03-27)
+
+**Goal:** Create comprehensive evaluation notebook for trained ViT + Mask R-CNN pipeline with metrics visualization.
+
+**Completed:**
+- [x] Created `notebooks/model_evaluation.ipynb` (6-section evaluation notebook)
+- [x] Section 1: Setup with imports, path resolution, device detection
+- [x] Section 2: ViT training analysis (loss curves, accuracy curves, hyperparams table)
+- [x] Section 3: Food-101 ViT evaluation (top-1/top-5 accuracy, per-class accuracy chart, confusion matrix)
+- [x] Section 4: Mask R-CNN segmentation review (overlay masks, detection stats, pixel-to-gram conversion)
+- [x] Section 5: End-to-end pipeline benchmarking (3-image demo, latency breakdown per stage)
+- [x] Section 6: Summary metrics and key findings
+
+**Key Metrics:**
+- ViT Food-101 top-1 accuracy: 89.87% (best_val_acc on 2,525-image sample)
+- Inference sample size: 25 images per class (configurable to 250 for full eval)
+- Segmentation: ≥5 sample images with mask overlays
+- Pipeline latency: Per-stage breakdown (classification / segmentation / calorie lookup / total)
+
+**New Artifacts:**
+- `notebooks/model_evaluation.ipynb` — Main evaluation notebook
+
+**Deliverables:**
+- Notebook executes top-to-bottom without unhandled exceptions
+- All 6 sections render with plots, tables, and sample predictions
+- Graceful handling of optional Detectron2 dependency
+- Configurable EVAL_SAMPLE constant for full/partial evaluation
+
+**Success Criteria:**
+- [x] Notebook runs without errors
+- [x] Training curves and metrics visualization complete
+- [x] ViT evaluation comprehensive (top-1, top-5, per-class, confusion matrix, predictions)
+- [x] Mask R-CNN section functional (with graceful skip if detectron2 absent)
+- [x] Pipeline benchmarking with latency breakdown
+- [x] Summary table and findings documented
 
 ---
 

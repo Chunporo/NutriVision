@@ -61,10 +61,11 @@ class NutriVisionPipeline:
         # Calorie database
         self.calorie_db = CalorieDB()
 
-        # Classifier
+        # Classifier — do NOT pass class_names here; let FoodClassifier auto-detect
+        # them from the checkpoint's id2label so the correct label set is used
+        # regardless of which dataset the checkpoint was trained on.
         self.classifier = FoodClassifier(
             model_path=self.cfg.vit_model_path,
-            class_names=self.calorie_db.class_names,
             device=self.cfg.device,
         )
 
@@ -130,8 +131,8 @@ class NutriVisionPipeline:
         # 3. Segment
         portions_raw: list[PortionResult] = self.segmentor.segment(bgr_image)
 
-        # 4. Calorie density for predicted class
-        cpg = self.calorie_db.calories_per_gram(top.class_index)
+        # 4. Calorie density — look up by name so any dataset's class indices work
+        cpg = self.calorie_db.calories_per_gram(top.class_name)
 
         # 5. Build portion details
         portions: list[PortionDetail] = []

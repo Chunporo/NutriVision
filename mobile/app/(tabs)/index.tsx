@@ -38,7 +38,6 @@ import {
 } from "../../src/utils/theme";
 import { getTodayDate, getGreeting } from "../../src/utils/helpers";
 import { CircularCalorieGauge } from "../../src/components/circular-calorie-gauge";
-import { SkeletonLoader } from "../../src/components/skeleton-loader";
 
 // Macro card definitions (order determines stagger index)
 const MACRO_CARDS = [
@@ -145,11 +144,13 @@ export default function HomeScreen() {
       {/* Daily Calorie Card — skeleton while loading, then gauge hero widget */}
       {loading ? (
         <>
-          <SkeletonLoader showImage={false} lines={0} />
+          {/* Calorie card placeholder — matches card height */}
+          <View style={[styles.calorieCard, styles.skeletonBlock, { backgroundColor: colors.surfaceSecondary }]} />
+          {/* Macro row placeholder — three equal-width blocks */}
           <View style={[styles.macroRow, { marginBottom: Spacing.lg }]}>
-            <SkeletonLoader showImage={false} lines={2} />
-            <SkeletonLoader showImage={false} lines={2} />
-            <SkeletonLoader showImage={false} lines={2} />
+            <View style={[styles.macroCardWrapper, styles.skeletonMacro, { backgroundColor: colors.surfaceSecondary }]} />
+            <View style={[styles.macroCardWrapper, styles.skeletonMacro, { backgroundColor: colors.surfaceSecondary }]} />
+            <View style={[styles.macroCardWrapper, styles.skeletonMacro, { backgroundColor: colors.surfaceSecondary }]} />
           </View>
         </>
       ) : (
@@ -355,6 +356,10 @@ const styles = StyleSheet.create({
   // Macro row
   macroRow: { flexDirection: "row", gap: Spacing.md, marginBottom: Spacing.lg },
   macroCardWrapper: { flex: 1 },
+
+  // Skeleton placeholders
+  skeletonBlock: { height: 168, marginBottom: Spacing.lg },
+  skeletonMacro: { height: 88, borderRadius: Radius.md },
   macroCard: {
     borderRadius: Radius.md,
     paddingVertical: Spacing.lg,

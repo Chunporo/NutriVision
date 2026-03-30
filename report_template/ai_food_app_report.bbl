@@ -1,0 +1,450 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{grandview2024market}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=3ac6348a7537d4e74e40d122bdb8ea8f}{%
+           family={{Grand View Research}},
+           familyi={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \strng{fullhash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \strng{bibnamehash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \strng{authorbibnamehash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \strng{authornamehash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \strng{authorfullhash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.grandviewresearch.com/horizon/outlook/diet-and-nutrition-apps-market-size/global}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Global Diet And Nutrition Apps Market Size \& Outlook}
+      \field{year}{2024}
+    \endentry
+    \entry{mordor2024market}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=bed88ffefb47aac601ec95157a59baa3}{%
+           family={{Mordor Intelligence}},
+           familyi={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{bed88ffefb47aac601ec95157a59baa3}
+      \strng{fullhash}{bed88ffefb47aac601ec95157a59baa3}
+      \strng{bibnamehash}{bed88ffefb47aac601ec95157a59baa3}
+      \strng{authorbibnamehash}{bed88ffefb47aac601ec95157a59baa3}
+      \strng{authornamehash}{bed88ffefb47aac601ec95157a59baa3}
+      \strng{authorfullhash}{bed88ffefb47aac601ec95157a59baa3}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.mordorintelligence.com/industry-reports/diet-and-nutrition-apps-market}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Diet And Nutrition Apps Market Size, Share \& 2030 Growth Trends}
+      \field{year}{2024}
+    \endentry
+    \entry{grandview2024industry}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=3ac6348a7537d4e74e40d122bdb8ea8f}{%
+           family={{Grand View Research}},
+           familyi={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \strng{fullhash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \strng{bibnamehash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \strng{authorbibnamehash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \strng{authornamehash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \strng{authorfullhash}{3ac6348a7537d4e74e40d122bdb8ea8f}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.grandviewresearch.com/industry-analysis/diet-nutrition-apps-market-report}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Diet And Nutrition Apps Market Size | Industry Report, 2030}
+      \field{year}{2024}
+    \endentry
+    \entry{businessresearch2025}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=d177c25a1fef0c5987de3ccb7977e52e}{%
+           family={{The Business Research Company}},
+           familyi={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{d177c25a1fef0c5987de3ccb7977e52e}
+      \strng{fullhash}{d177c25a1fef0c5987de3ccb7977e52e}
+      \strng{bibnamehash}{d177c25a1fef0c5987de3ccb7977e52e}
+      \strng{authorbibnamehash}{d177c25a1fef0c5987de3ccb7977e52e}
+      \strng{authornamehash}{d177c25a1fef0c5987de3ccb7977e52e}
+      \strng{authorfullhash}{d177c25a1fef0c5987de3ccb7977e52e}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.thebusinessresearchcompany.com/report/diet-and-nutrition-apps-global-market-report}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Diet \& Nutrition Apps Market 2025 - Statistics \& Industry Trends}
+      \field{year}{2025}
+    \endentry
+    \entry{garagegym2026}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=0ea4551e85dd39c294bad269859b5252}{%
+           family={{Garage Gym Reviews}},
+           familyi={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{0ea4551e85dd39c294bad269859b5252}
+      \strng{fullhash}{0ea4551e85dd39c294bad269859b5252}
+      \strng{bibnamehash}{0ea4551e85dd39c294bad269859b5252}
+      \strng{authorbibnamehash}{0ea4551e85dd39c294bad269859b5252}
+      \strng{authornamehash}{0ea4551e85dd39c294bad269859b5252}
+      \strng{authorfullhash}{0ea4551e85dd39c294bad269859b5252}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.garagegymreviews.com/best-calorie-counter-apps}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{8 Best Calorie Counter Apps: RD-Approved (2026)}
+      \field{year}{2026}
+    \endentry
+    \entry{wang2024swin}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{2}{}{%
+        {{hash=39856f0439f35f79a8eed8b12d26166c}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+        {{hash=2a53826c20480bd4a1840576fd1b8648}{%
+           family={Tian},
+           familyi={T\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{862cda26945ae9438201696ef6efab38}
+      \strng{fullhash}{862cda26945ae9438201696ef6efab38}
+      \strng{bibnamehash}{862cda26945ae9438201696ef6efab38}
+      \strng{authorbibnamehash}{862cda26945ae9438201696ef6efab38}
+      \strng{authornamehash}{862cda26945ae9438201696ef6efab38}
+      \strng{authorfullhash}{862cda26945ae9438201696ef6efab38}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Frontiers in Nutrition}
+      \field{note}{Primary source for Classification Architecture}
+      \field{title}{Nutritional composition analysis in food images: An innovative Swin Transformer approach}
+      \field{volume}{11}
+      \field{year}{2024}
+    \endentry
+    \entry{han2023dpf}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{2}{}{%
+        {{hash=a3689cff14b613b6de688c1c553aa310}{%
+           family={Han},
+           familyi={H\bibinitperiod},
+           given={Y.},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=5cd99d7a48f2c8d190f293d5ae2d5f51}{%
+           family={Cheng},
+           familyi={C\bibinitperiod},
+           given={Q.},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \strng{namehash}{dda9de3baf5b9a1e76329d45bb1e2601}
+      \strng{fullhash}{dda9de3baf5b9a1e76329d45bb1e2601}
+      \strng{bibnamehash}{dda9de3baf5b9a1e76329d45bb1e2601}
+      \strng{authorbibnamehash}{dda9de3baf5b9a1e76329d45bb1e2601}
+      \strng{authornamehash}{dda9de3baf5b9a1e76329d45bb1e2601}
+      \strng{authorfullhash}{dda9de3baf5b9a1e76329d45bb1e2601}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2310.11702}
+      \field{note}{Primary source for Volume Estimation}
+      \field{title}{DPF-Nutrition: Food nutrition estimation via depth prediction and fusion}
+      \field{year}{2023}
+    \endentry
+    \entry{prenet2024}{article}{}
+      \name{author}{1}{}{%
+        {{hash=0734f11bb89fc5a69cc111823981ee4b}{%
+           family={{PMC}},
+           familyi={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{0734f11bb89fc5a69cc111823981ee4b}
+      \strng{fullhash}{0734f11bb89fc5a69cc111823981ee4b}
+      \strng{bibnamehash}{0734f11bb89fc5a69cc111823981ee4b}
+      \strng{authorbibnamehash}{0734f11bb89fc5a69cc111823981ee4b}
+      \strng{authornamehash}{0734f11bb89fc5a69cc111823981ee4b}
+      \strng{authorfullhash}{0734f11bb89fc5a69cc111823981ee4b}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://pmc.ncbi.nlm.nih.gov/articles/PMC12052122/}}
+      \field{journaltitle}{PMC}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Improving fine-grained food classification using deep residual networks}
+      \field{year}{2024}
+    \endentry
+    \entry{multimodalfood2024}{article}{}
+      \name{author}{1}{}{%
+        {{hash=9c71ca0e8ac5da7336ffa149007898f9}{%
+           family={{ResearchGate}},
+           familyi={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{9c71ca0e8ac5da7336ffa149007898f9}
+      \strng{fullhash}{9c71ca0e8ac5da7336ffa149007898f9}
+      \strng{bibnamehash}{9c71ca0e8ac5da7336ffa149007898f9}
+      \strng{authorbibnamehash}{9c71ca0e8ac5da7336ffa149007898f9}
+      \strng{authornamehash}{9c71ca0e8ac5da7336ffa149007898f9}
+      \strng{authorfullhash}{9c71ca0e8ac5da7336ffa149007898f9}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.researchgate.net/publication/385998420_Multimodal_Food_Image_Classification_with_Large_Language_Models}}
+      \field{journaltitle}{ResearchGate}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Multimodal Food Image Classification with Large Language Models}
+      \field{year}{2024}
+    \endentry
+    \entry{qi2025vif}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{1}{}{%
+        {{hash=099b1d4e1fde17bf0dfe5799d6a72dbd}{%
+           family={Qi},
+           familyi={Q\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{f9469a53a61f6d9efa0b4d1c4c90bffb}
+      \strng{fullhash}{f9469a53a61f6d9efa0b4d1c4c90bffb}
+      \strng{bibnamehash}{f9469a53a61f6d9efa0b4d1c4c90bffb}
+      \strng{authorbibnamehash}{f9469a53a61f6d9efa0b4d1c4c90bffb}
+      \strng{authornamehash}{f9469a53a61f6d9efa0b4d1c4c90bffb}
+      \strng{authorfullhash}{f9469a53a61f6d9efa0b4d1c4c90bffb}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint}
+      \field{note}{Source for Ingredient Fusion logic}
+      \field{title}{Advancing Food Nutrition Estimation via Visual-Ingredient Feature Fusion}
+      \field{year}{2025}
+    \endentry
+    \entry{nutritioncoaching2025}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=a202db56433c7af73fe152ff1ccdba65}{%
+           family={{Nutrition Coaching Academy}},
+           familyi={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{a202db56433c7af73fe152ff1ccdba65}
+      \strng{fullhash}{a202db56433c7af73fe152ff1ccdba65}
+      \strng{bibnamehash}{a202db56433c7af73fe152ff1ccdba65}
+      \strng{authorbibnamehash}{a202db56433c7af73fe152ff1ccdba65}
+      \strng{authornamehash}{a202db56433c7af73fe152ff1ccdba65}
+      \strng{authorfullhash}{a202db56433c7af73fe152ff1ccdba65}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.nutritioncoachingacademy.com/blog/the3bestaicalorietrackingappsin2025}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{The 3 Best AI Calorie Tracking Apps in 2025}
+      \field{year}{2025}
+    \endentry
+    \entry{lifehacker2024}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=60093f0b90a88793a9740d723d7feac5}{%
+           family={{Lifehacker}},
+           familyi={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{60093f0b90a88793a9740d723d7feac5}
+      \strng{fullhash}{60093f0b90a88793a9740d723d7feac5}
+      \strng{bibnamehash}{60093f0b90a88793a9740d723d7feac5}
+      \strng{authorbibnamehash}{60093f0b90a88793a9740d723d7feac5}
+      \strng{authornamehash}{60093f0b90a88793a9740d723d7feac5}
+      \strng{authorfullhash}{60093f0b90a88793a9740d723d7feac5}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://lifehacker.com/health/ai-powered-calorie-counting-apps-worse-than-expected}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{I Used AI-Powered Calorie Counting Apps, and They Were Even Worse Than Expected}
+      \field{year}{2024}
+    \endentry
+    \entry{portionsmaster2024}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=317bd1425607e7a755cddbdb4ca58482}{%
+           family={{PortionsMaster}},
+           familyi={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{317bd1425607e7a755cddbdb4ca58482}
+      \strng{fullhash}{317bd1425607e7a755cddbdb4ca58482}
+      \strng{bibnamehash}{317bd1425607e7a755cddbdb4ca58482}
+      \strng{authorbibnamehash}{317bd1425607e7a755cddbdb4ca58482}
+      \strng{authornamehash}{317bd1425607e7a755cddbdb4ca58482}
+      \strng{authorfullhash}{317bd1425607e7a755cddbdb4ca58482}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://portionsmaster.com/blog/from-photo-to-nutrition-facts-how-ai-makes-food-logging-frictionless/}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{From Photo to Nutrition Facts: How AI Makes Food Logging Frictionless}
+      \field{year}{2024}
+    \endentry
+    \entry{nutriscan2025}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=4c84de1b7bb4764d24aac2c401371236}{%
+           family={{NutriScan}},
+           familyi={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{4c84de1b7bb4764d24aac2c401371236}
+      \strng{fullhash}{4c84de1b7bb4764d24aac2c401371236}
+      \strng{bibnamehash}{4c84de1b7bb4764d24aac2c401371236}
+      \strng{authorbibnamehash}{4c84de1b7bb4764d24aac2c401371236}
+      \strng{authornamehash}{4c84de1b7bb4764d24aac2c401371236}
+      \strng{authorfullhash}{4c84de1b7bb4764d24aac2c401371236}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://nutriscan.app/blog/posts/best-free-ai-calorie-tracking-apps-2025-bd41261e7d}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Best Free AI Calorie Tracking Apps in 2025: Your Complete Guide}
+      \field{year}{2025}
+    \endentry
+    \entry{personalizednutrition2024}{article}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://pmc.ncbi.nlm.nih.gov/articles/PMC12474561/}}
+      \field{journaltitle}{PMC}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Personalized Nutrition in the Era of Digital Health: A New Frontier for Chronic Disease Management}
+      \field{year}{2024}
+    \endentry
+    \entry{sciencedaily2024}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=bce07cca7bc0e44f71891cd3ffc989bb}{%
+           family={{ScienceDaily}},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{bce07cca7bc0e44f71891cd3ffc989bb}
+      \strng{fullhash}{bce07cca7bc0e44f71891cd3ffc989bb}
+      \strng{bibnamehash}{bce07cca7bc0e44f71891cd3ffc989bb}
+      \strng{authorbibnamehash}{bce07cca7bc0e44f71891cd3ffc989bb}
+      \strng{authornamehash}{bce07cca7bc0e44f71891cd3ffc989bb}
+      \strng{authorfullhash}{bce07cca7bc0e44f71891cd3ffc989bb}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.sciencedaily.com/releases/2024/09/240904131013.htm}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{AI food tracking apps need improvement to address accuracy}
+      \field{year}{2024}
+    \endentry
+    \entry{modelbased2013}{article}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://pmc.ncbi.nlm.nih.gov/articles/PMC3819104/}}
+      \field{journaltitle}{PMC}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Model-based measurement of food portion size for image-based dietary assessment}
+      \field{year}{2013}
+    \endentry
+    \entry{usdafooddata2024}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=96b6352f0feb7beef6ead98c27472286}{%
+           family={{USDA}},
+           familyi={U\bibinitperiod}}}%
+      }
+      \strng{namehash}{96b6352f0feb7beef6ead98c27472286}
+      \strng{fullhash}{96b6352f0feb7beef6ead98c27472286}
+      \strng{bibnamehash}{96b6352f0feb7beef6ead98c27472286}
+      \strng{authorbibnamehash}{96b6352f0feb7beef6ead98c27472286}
+      \strng{authornamehash}{96b6352f0feb7beef6ead98c27472286}
+      \strng{authorfullhash}{96b6352f0feb7beef6ead98c27472286}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://fdc.nal.usda.gov/api-guide}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{FoodData Central API Guide}
+      \field{year}{2024}
+    \endentry
+    \entry{marketsandmarkets2025}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=4fb21352ee4fd5af5b5cc9e7b5714e5f}{%
+           family={{MarketsandMarkets}},
+           familyi={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{4fb21352ee4fd5af5b5cc9e7b5714e5f}
+      \strng{fullhash}{4fb21352ee4fd5af5b5cc9e7b5714e5f}
+      \strng{bibnamehash}{4fb21352ee4fd5af5b5cc9e7b5714e5f}
+      \strng{authorbibnamehash}{4fb21352ee4fd5af5b5cc9e7b5714e5f}
+      \strng{authornamehash}{4fb21352ee4fd5af5b5cc9e7b5714e5f}
+      \strng{authorfullhash}{4fb21352ee4fd5af5b5cc9e7b5714e5f}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.marketsandmarkets.com/blog/FB/personalized-nutrition-market-size}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Personalized Nutrition Market Set to Double by 2030: How Data and AI are Reshaping the Industry}
+      \field{year}{2025}
+    \endentry
+    \entry{ailawyer2024}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=abc62134ce5c8ac104f6ae6c4dc95c09}{%
+           family={{AI Lawyer}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{abc62134ce5c8ac104f6ae6c4dc95c09}
+      \strng{fullhash}{abc62134ce5c8ac104f6ae6c4dc95c09}
+      \strng{bibnamehash}{abc62134ce5c8ac104f6ae6c4dc95c09}
+      \strng{authorbibnamehash}{abc62134ce5c8ac104f6ae6c4dc95c09}
+      \strng{authornamehash}{abc62134ce5c8ac104f6ae6c4dc95c09}
+      \strng{authorfullhash}{abc62134ce5c8ac104f6ae6c4dc95c09}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://ailawyer.pro/blog/disclaimer-template-professional-use-and-information}}
+      \field{note}{Accessed: January 9, 2026}
+      \field{title}{Disclaimer Template - Professional Use and Information}
+      \field{year}{2024}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

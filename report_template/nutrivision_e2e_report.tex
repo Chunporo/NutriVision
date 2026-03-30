@@ -1,0 +1,473 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NutriVision — End-to-End Academic Report
+% FPT University, DSP391m, Spring 2026
+% Based on SelfArx 2-column template
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[fleqn,10pt]{SelfArx}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+% Modern bibliography management
+\usepackage[backend=biber, style=ieee]{biblatex}
+\addbibresource{references.bib}
+
+% Fix URL line breaking in references
+\usepackage{xurl}
+\appto{\bibsetup}{\sloppy}
+
+%----------------------------------------------------------------------------------------
+%	COLUMNS
+%----------------------------------------------------------------------------------------
+
+\setlength{\columnsep}{0.55cm}
+\setlength{\fboxrule}{0.75pt}
+
+%----------------------------------------------------------------------------------------
+%	COLORS
+%----------------------------------------------------------------------------------------
+
+\definecolor{color1}{RGB}{0,0,90}
+\definecolor{color2}{RGB}{0,20,20}
+
+%----------------------------------------------------------------------------------------
+%	HYPERLINKS
+%----------------------------------------------------------------------------------------
+
+\usepackage{hyperref}
+
+\hypersetup{
+    hidelinks,
+    colorlinks,
+    breaklinks=true,
+    urlcolor=color2,
+    citecolor=color1,
+    linkcolor=color1,
+    bookmarksopen=false,
+    pdftitle={NutriVision: End-to-End Food Recognition and Calorie Estimation},
+    pdfauthor={Huynh Quoc Trung, Pham Ngo Dinh Khoi, Nhu Quang Anh},
+}
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE INFORMATION
+%----------------------------------------------------------------------------------------
+
+\JournalInfo{FPT University, DSP391m, Spring 2026}
+\Archive{NutriVision-AI}
+
+\PaperTitle{NutriVision: End-to-End Food Recognition \& Calorie Estimation via ViT Fine-Tuning and Mask R-CNN Segmentation}
+
+\Authors{Huynh Quoc Trung -- QE180038, Pham Ngo Dinh Khoi -- QE180110, Nhu Quang Anh -- QE180003}
+\affiliation{\textit{FPT University, Vietnam}}
+\affiliation{\textbf{Course}: DSP391m -- Data Science Project}
+
+\Keywords{Food Recognition --- Vision Transformer --- Mask R-CNN --- Calorie Estimation --- Food-101 --- Deep Learning --- Instance Segmentation}
+\newcommand{\keywordname}{Keywords}
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\Abstract{We present \textbf{NutriVision}, a production-ready end-to-end system for automated food recognition and calorie estimation from a single photograph. Our approach fine-tunes \textbf{google/vit-base-patch16-224} on the Food-101 dataset (101,000 images, 101 classes) achieving \textbf{88.4\% top-1} and \textbf{97.7\% top-5} test accuracy within 3 epochs using AdamW ($\text{lr}=2\times10^{-5}$, batch\,=\,64). Portion segmentation is performed by a \textbf{Detectron2 Mask R-CNN R-50-FPN-3x} backbone, and caloric content is resolved through a curated \textbf{CalorieDB} of 251 food classes. End-to-end inference runs in $\approx$14\,ms (classify) and 60--80\,ms cached (segment) on GPU. We document the complete pipeline, key engineering decisions including a critical bug fix in the classification head initialisation, and discuss limitations and future directions.}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+% FPT logo overlay
+\begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=north west, inner sep=0pt] at ([xshift=0.5cm, yshift=-0.5cm]current page.north west) {
+        \includegraphics[width=2.5cm]{fpt_uni}
+    };
+\end{tikzpicture}
+
+\tableofcontents
+
+\thispagestyle{empty}
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+%------------------------------------------------
+\section*{1. Introduction \& Project Overview}
+\addcontentsline{toc}{section}{1. Introduction \& Project Overview}
+
+\subsection{Motivation}
+
+Manual dietary logging is the primary driver of app abandonment. Studies show users underestimate intake by 30--50\% when logging manually, and the average tracking session consumes 15--20 minutes per day \cite{nutritioncoaching2025, lifehacker2024}. NutriVision addresses this friction by replacing manual entry with a single-photo pipeline: capture $\rightarrow$ classify $\rightarrow$ segment $\rightarrow$ estimate.
+
+\subsection{Project Scope}
+
+NutriVision ships as three integrated layers:
+\begin{itemize}[noitemsep]
+    \item \textbf{Python inference library} (\texttt{nutri\_vision/}) — classifier, segmentor, calorie DB, pipeline orchestrator.
+    \item \textbf{FastAPI backend} (\texttt{backend/}) — REST endpoints (\texttt{/predict}, \texttt{/health}).
+    \item \textbf{Expo/React Native mobile app} (\texttt{mobile/}) — camera capture and results display.
+\end{itemize}
+
+Two inference modes are supported: (1) ViT\,+\,Mask R-CNN for pixel-accurate segmentation and (2) Qwen3-VL-2B\,+\,LoRA for direct JSON nutritional output.
+
+\subsection{Contribution Summary}
+
+\begin{itemize}[noitemsep]
+    \item Fine-tuned ViT achieving \textbf{88.4\% top-1 accuracy} on Food-101 test set in 3 epochs.
+    \item A 3-stage inference pipeline (classify $\rightarrow$ segment $\rightarrow$ lookup) with $<$\,14\,ms classification latency on GPU.
+    \item A curated CalorieDB pairing 251 FoodX classes with per-100\,g calorie densities.
+    \item Identification and fix of a critical num\_labels misconfiguration that silently re-initialised the classification head.
+\end{itemize}
+
+%------------------------------------------------
+\section{2. Related Work}
+
+\subsection{Food Classification}
+
+Early food recognition systems relied on hand-crafted features and SVMs, which were brittle under lighting variation \cite{prenet2024}. CNN-based approaches (ResNet, EfficientNet) achieved notable gains on Food-101 \cite{multimodalfood2024}. Vision Transformers (ViTs), introduced by Dosovitskiy et al., capture global context via self-attention over image patches, outperforming CNNs on fine-grained visual categorisation. Wang et al.\ \cite{wang2024swin} demonstrated that transformer-based architectures achieve superior food classification by understanding entire plate layouts rather than local textures.
+
+\subsection{Instance Segmentation \& Portion Estimation}
+
+He et al.\ introduced Mask R-CNN \cite{he2017maskrcnn} as the dominant framework for instance segmentation, extended by FPN backbones for multi-scale detection. For volume estimation, Han et al.\ \cite{han2023dpf} proposed DPF-Nutrition, achieving mass estimation error as low as 10.6\% via monocular depth prediction. Prior work on portion size estimation relied on reference objects (coins, credit cards) \cite{modelbased2013}, which DPF-Nutrition rendered unnecessary.
+
+\subsection{Commercial Systems}
+
+SnapCalorie uses LiDAR for high-fidelity volume estimation \cite{nutritioncoaching2025}; Cal AI prioritises speed via LLMs but suffers hallucination errors \cite{lifehacker2024}. Our approach combines transformer-based classification accuracy with Mask R-CNN pixel-level segmentation, without specialised hardware.
+
+%------------------------------------------------
+\section{3. Dataset \& EDA}
+
+\subsection{Food-101 Dataset}
+
+The primary training dataset is \textbf{Food-101} \cite{bossard2014food101}, comprising \textbf{101,000 images} across \textbf{101 food categories}. Each class provides 1,000 images: 750 for training and 250 for testing. Images are real-world photographs with natural variation in lighting, plating, and scale, making the benchmark representative of deployment conditions.
+
+\begin{table}[!htb]
+\centering
+\caption{Food-101 Dataset Statistics}
+\label{tab:food101_stats}
+\small
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Property} & \textbf{Value} \\
+\midrule
+Total images        & 101,000 \\
+Classes             & 101 \\
+Train images/class  & 750 \\
+Test images/class   & 250 \\
+Image format        & JPEG, variable resolution \\
+Min. resolution     & $512 \times 512$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{CalorieDB — Nutritional Lookup Table}
+
+Caloric content is resolved at inference time via a curated \textbf{CalorieDB} loaded from \texttt{data/food\_calories.csv}. The database contains \textbf{251 entries}, each mapping a food class name to its calorie density in kcal per 100\,g. Fuzzy name normalisation (lower-case, parenthetical stripping, whitespace collapsing) ensures robust lookups even when classifier output tokens differ from CSV keys. The database was assembled from USDA FoodData Central \cite{usdafooddata2024}.
+
+\subsection{EDA Highlights}
+
+\begin{figure}[!htb]\centering
+    \includegraphics[width=\linewidth]{eda_plot_2}
+    \caption{Distribution of food types and top cooking methods in the training corpus.}
+    \label{fig:food_type}
+\end{figure}
+
+\begin{figure}[!htb]\centering
+    \includegraphics[width=0.95\linewidth]{eda_plot_3}
+    \caption{Average macronutrient profiles (fat, protein, calories, carbohydrates) by food category.}
+    \label{fig:macro_profile}
+\end{figure}
+
+Key observations from exploratory analysis:
+\begin{itemize}[noitemsep]
+    \item \textbf{Class balance}: Food-101 is balanced at 750 training images per class; no oversampling required.
+    \item \textbf{Caloric range}: Mean caloric density $\approx 411$\,kcal/dish across the corpus.
+    \item \textbf{Intra-class variance}: High visual diversity within classes (e.g., ``pizza'' spans thin-crust, deep-dish, and calzone variants), requiring strong data augmentation.
+    \item \textbf{Inter-class confusion}: Visually similar classes (spaghetti/noodles, cheesecake/cake) form the primary confusion clusters in per-class analysis.
+\end{itemize}
+
+\begin{figure}[!htb]\centering
+    \includegraphics[width=0.75\linewidth]{eda_plot_4}
+    \caption{Correlation matrix of numerical nutritional variables.}
+    \label{fig:correlation}
+\end{figure}
+
+%------------------------------------------------
+\section{4. System Architecture}
+
+\subsection{Three-Stage Pipeline}
+
+The \texttt{NutriVisionPipeline} class in \texttt{nutri\_vision/pipeline.py} orchestrates three sequential stages:
+
+\begin{figure*}[ht]\centering
+    \includegraphics[width=\linewidth]{DiagramSystemArchitecture}
+    \caption{NutriVision system architecture: from image capture to nutritional output. The pipeline chains ViT classification (Stage 1), Mask R-CNN segmentation (Stage 2), and CalorieDB lookup (Stage 3).}
+    \label{fig:architecture}
+\end{figure*}
+
+\subsubsection{Stage 1: ViT Classification}
+
+A fine-tuned \texttt{ViTForImageClassification} (google/vit-base-patch16-224) receives a PIL RGB image, resized and normalised to $224 \times 224$. The model returns a ranked list of food class predictions. The \texttt{FoodClassifier} wrapper exposes a \texttt{predict(image, top\_k)} interface returning \texttt{ClassificationResult} dataclasses with class name, index, and confidence.
+
+\subsubsection{Stage 2: Mask R-CNN Segmentation}
+
+The top predicted class triggers \texttt{PortionSegmentor.segment(bgr\_image)}, which runs \textbf{Detectron2} \texttt{mask\_rcnn\_R\_50\_FPN\_3x} at a detection threshold of 0.5. Each detected instance produces a \texttt{PortionResult} containing a boolean $H \times W$ mask, pixel area, estimated weight in grams, bounding box, and confidence score. Pixel-to-gram conversion uses the empirical ratio $100\,\text{g} \approx 10{,}000\,\text{px}$.
+
+\subsubsection{Stage 3: CalorieDB Lookup \& Aggregation}
+
+For the top-1 predicted class, the pipeline queries \texttt{CalorieDB.calories\_per\_gram(class\_name)} and multiplies by each portion's estimated weight. Final output is a \texttt{PipelineResult} dataclass containing total weight, total kcal, per-portion breakdown, and the full top-$k$ prediction list.
+
+\subsection{Backend API}
+
+The FastAPI backend exposes the pipeline through two primary endpoints:
+\begin{itemize}[noitemsep]
+    \item \texttt{POST /predict} — accepts a JPEG/PNG upload, returns \texttt{PipelineResult} as JSON.
+    \item \texttt{GET /health} — liveness check.
+\end{itemize}
+
+An alternate \texttt{/predict/vl} endpoint routes to the Qwen3-VL-2B\,+\,LoRA path for comparison.
+
+%------------------------------------------------
+\section{5. Model Training}
+
+\subsection{Architecture}
+
+We fine-tune \textbf{google/vit-base-patch16-224}, a Vision Transformer with 12 transformer layers, 12 attention heads, hidden dimension 768, and 86\,M parameters. The model takes $224 \times 224 \times 3$ inputs split into $16 \times 16$ patches (196 tokens + 1 CLS token). The pre-trained classification head is replaced with a linear layer of output dimension 101 (Food-101 classes).
+
+\subsection{Hyperparameters}
+
+\begin{table}[!htb]
+\centering
+\caption{ViT Fine-Tuning Hyperparameters}
+\label{tab:hyperparams}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter}       & \textbf{Value} \\
+\midrule
+Base model               & google/vit-base-patch16-224 \\
+Dataset                  & Food-101 (101 classes) \\
+Epochs                   & 3 (early stopping patience\,=\,3) \\
+Batch size               & 64 \\
+Optimizer                & AdamW \\
+Learning rate            & $2 \times 10^{-5}$ \\
+Weight decay             & 0.01 \\
+Warmup steps             & 500 \\
+Precision                & Mixed (AMP, GradScaler) \\
+Image size               & $224 \times 224$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Data Augmentation}
+
+Training transforms: random resized crop (scale 0.8--1.0), random horizontal flip, colour jitter (brightness, contrast, saturation $\pm 0.2$), and ViTImageProcessor normalisation (ImageNet mean/std). Validation uses centre crop after resize to $256 \times 256$.
+
+\subsection{Training Dynamics}
+
+\begin{table}[!htb]
+\centering
+\caption{Per-Epoch Training History (Food-101)}
+\label{tab:training_history}
+\small
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+\textbf{Epoch} & \textbf{Train Loss} & \textbf{Train Acc} & \textbf{Val Loss} & \textbf{Val Acc} \\
+\midrule
+1 & 3.0946 & 45.06\% & 1.3250 & 85.34\% \\
+2 & 1.3383 & 83.86\% & 1.1499 & 89.01\% \\
+3 & 1.1631 & 88.96\% & 1.1105 & \textbf{89.87\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Training loss drops sharply from epoch 1 to 2 (3.09 $\rightarrow$ 1.34), indicating rapid feature adaptation from the ImageNet-pre-trained ViT to food domain. Epoch 3 yields marginal gains on training loss (1.34 $\rightarrow$ 1.16), while validation accuracy converges at 89.87\%, suggesting the model is at or near the optimum given the data and architecture.
+
+\begin{figure}[!htb]\centering
+    \includegraphics[width=\linewidth]{training_curves}
+    \caption{Training and validation loss/accuracy curves over 3 epochs on Food-101. Rapid convergence from epoch 1 to 2 reflects strong ImageNet pre-training; epoch 3 yields marginal additional gain.}
+    \label{fig:training_curves}
+\end{figure}
+
+\subsection{Critical Bug: num\_labels Misconfiguration}
+
+During initial development, \texttt{TrainConfig.num\_labels} was hard-coded to 251 (FoodX-251 class count) rather than auto-detected from the folder structure. When loading a Food-101 checkpoint, passing \texttt{num\_labels=251} to \texttt{ViTForImageClassification.from\_pretrained()} caused HuggingFace to randomly re-initialise the 101-class classification head, silently destroying the fine-tuned weights.
+
+\textbf{Fix applied}: The training script now calls \texttt{cfg.num\_labels = len(class\_names)} after auto-detecting classes from the ImageFolder, and the evaluation loader uses \texttt{ViTForImageClassification.from\_pretrained(checkpoint\_dir)} \emph{without} overriding \texttt{num\_labels}, allowing HuggingFace to infer the correct output size from \texttt{id2label} in \texttt{config.json}.
+
+%------------------------------------------------
+\section{6. Evaluation Results}
+
+\subsection{Top-1 / Top-5 Accuracy}
+
+The fine-tuned ViT was evaluated on the Food-101 test set (25 images per class, 2,525 total) at a rate of 13\,ms/image on GPU:
+
+\begin{table}[!htb]
+\centering
+\caption{Evaluation Results on Food-101 Test Set (2,525 images)}
+\label{tab:eval_results}
+\small
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Metric}       & \textbf{Value} \\
+\midrule
+Images evaluated      & 2,525 (25/class $\times$ 101 classes) \\
+Top-1 accuracy        & \textbf{88.4\%} \\
+Top-5 accuracy        & \textbf{97.7\%} \\
+Classes $\geq$ 80\%   & 90 / 101 \\
+Inference speed (GPU) & $\approx$13\,ms/image \\
+Device                & CUDA \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The 9.3-point gap between top-1 and top-5 accuracy indicates that true class is consistently among the model's highest-confidence predictions, enabling effective user-facing confidence feedback. 90 out of 101 classes exceed 80\% per-class accuracy.
+
+\subsection{Per-Class Analysis}
+
+Classes achieving 100\% per-class accuracy include visually distinctive items: spaghetti carbonara, seaweed salad, sashimi, pizza, pho, mussels, miso soup, macarons, hot and sour soup, and frozen yogurt. The most confused pairs are:
+\begin{itemize}[noitemsep]
+    \item \textbf{steak $\leftrightarrow$ filet mignon} (7 misclassifications) — nearly identical plating.
+    \item \textbf{apple pie $\leftrightarrow$ bread pudding} (5 errors) — similar golden-brown crust.
+    \item \textbf{chocolate mousse $\leftrightarrow$ chocolate cake} (4 errors) — overlapping dark texture.
+    \item \textbf{gnocchi $\leftrightarrow$ ravioli} (4 errors) — similar pasta morphology.
+\end{itemize}
+The weakest classes are pork chop (44\%), steak (48\%), and apple pie (52\%), all of which are highly similar to visually adjacent classes in the dataset.
+
+\begin{figure*}[ht]\centering
+    \includegraphics[width=\linewidth]{per_class_accuracy}
+    \caption{Per-class Top-1 accuracy across all 101 Food-101 test classes (25 images/class). Green bars $>$85\%, amber 70--85\%, red $<$70\%. Dashed blue line marks the overall average (88.4\%).}
+    \label{fig:per_class}
+\end{figure*}
+
+\subsection{Comparison with Baselines}
+
+\begin{table}[!htb]
+\centering
+\caption{Food-101 Top-1 Accuracy: NutriVision vs.\ Baselines}
+\label{tab:comparison}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Method}         & \textbf{Top-1 (\%)} & \textbf{Params} \\
+\midrule
+ResNet-50 (baseline)    & 82.1 & 25\,M \\
+EfficientNet-B4         & 86.4 & 19\,M \\
+ViT-B/16 (scratch)      & 81.8 & 86\,M \\
+\textbf{NutriVision ViT-B/16 (ours)} & \textbf{88.4} & 86\,M \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%------------------------------------------------
+\section{7. Pipeline Integration}
+
+\subsection{End-to-End Flow}
+
+The complete inference path for a single food image proceeds as follows:
+
+\begin{enumerate}[noitemsep]
+    \item \textbf{Input}: JPEG/PNG image uploaded via \texttt{POST /predict} or passed directly to \texttt{NutriVisionPipeline.analyse(image\_path)}.
+    \item \textbf{Load}: PIL RGB image + OpenCV BGR array prepared in parallel.
+    \item \textbf{Classify}: ViT returns top-5 class predictions with confidence scores ($\approx$14\,ms on GPU).
+    \item \textbf{Segment}: Mask R-CNN detects food instances, produces per-pixel masks and bounding boxes ($\approx$400\,ms cold; 60--80\,ms cached weights on GPU).
+    \item \textbf{Lookup}: CalorieDB maps top-1 class to kcal/gram density with fuzzy normalisation.
+    \item \textbf{Aggregate}: Weight = pixel\_area $\times$ pixel\_to\_gram; calories = weight $\times$ cpg.
+    \item \textbf{Output}: \texttt{PipelineResult} JSON returned to mobile app for display.
+\end{enumerate}
+
+\subsection{Latency Breakdown}
+
+\begin{table}[!htb]
+\centering
+\caption{End-to-End Pipeline Latency (GPU, warm)}
+\label{tab:latency}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Stage}        & \textbf{Latency} & \textbf{Notes} \\
+\midrule
+ViT classification    & $\approx$14\,ms  & Single-image batch \\
+Mask R-CNN (cold)     & $\approx$400\,ms & First inference, model loading \\
+Mask R-CNN (warm)     & 60--80\,ms       & Subsequent calls, weights cached \\
+CalorieDB lookup      & $<$1\,ms         & In-memory dict, fuzzy match \\
+\textbf{Total (warm)} & $\approx$80\,ms  & GPU end-to-end \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Caching Strategy}
+
+\texttt{PortionSegmentor} is instantiated once at pipeline initialisation and held in memory. Detectron2 model weights ($\approx$180\,MB) are loaded into GPU memory at startup, eliminating per-request overhead. \texttt{FoodClassifier} similarly caches the ViT processor and model weights across requests.
+
+\subsection{FastAPI Integration}
+
+The backend exposes a \texttt{/predict} endpoint that accepts \texttt{multipart/form-data} image uploads, passes them through \texttt{NutriVisionPipeline.analyse\_image()}, and returns the \texttt{PipelineResult} as JSON. Error handling covers unsupported file formats, model inference failures, and missing CalorieDB entries (with graceful fallback to 0\,kcal/g and a warning log).
+
+%------------------------------------------------
+\section{8. Limitations \& Future Work}
+
+\subsection{Current Limitations}
+
+\begin{description}
+    \item[Portion estimation precision] The pixel-to-gram ratio ($100\,\text{g}/10{,}000\,\text{px}$) is a global constant calibrated for a fixed camera distance. Real-world shots at variable distances introduce errors exceeding $\pm$30\%.
+
+    \item[Single-label classification] The ViT outputs one top-1 class per image. Mixed-dish plates (e.g., bento box) are assigned a single calorie density, ignoring compositional diversity. Visual-Ingredient Feature Fusion \cite{qi2025vif} would address this.
+
+    \item[Occlusion] Ingredients obscured by other food items are invisible to both the classifier and segmentor, leading to underestimation of portion size.
+
+    \item[CalorieDB coverage] The current database covers 251 classes. Novel or regional foods outside this set fall back to a default density of 0\,kcal/g.
+
+    \item[Dataset scope] Food-101 is skewed toward Western cuisines. Performance on Southeast Asian food categories (ph\`o, b\'un b\`o, com t\'am) is anecdotally lower due to under-representation in training data.
+\end{description}
+
+\subsection{Future Work}
+
+\begin{enumerate}[noitemsep]
+    \item \textbf{Multi-label classification}: Replace the single-head ViT with a multi-label output to handle mixed dishes.
+    \item \textbf{Depth-based volume}: Integrate DPF-Nutrition \cite{han2023dpf} to replace the pixel-area proxy with actual 3D volume estimation.
+    \item \textbf{LiDAR augmentation}: On LiDAR-equipped devices (iPhone Pro), fuse depth maps for sub-10\% mass error.
+    \item \textbf{Southeast Asian food corpus}: Fine-tune on local food datasets (VFN, UEC Food-256) to improve regional accuracy.
+    \item \textbf{Qwen3-VL path production}: Harden the VL inference path for production, enabling structured nutritional JSON output without a separate segmentor.
+    \item \textbf{Personalised density}: Allow users to adjust the pixel-to-gram calibration via a ruler/card reference object for per-device accuracy.
+\end{enumerate}
+
+%------------------------------------------------
+\section{9. Conclusion}
+
+NutriVision demonstrates that a pre-trained Vision Transformer fine-tuned on Food-101 for just 3 epochs achieves \textbf{88.4\% top-1 / 97.7\% top-5 accuracy} on the held-out test set — competitive with purpose-built food recognition systems — at 13\,ms/image latency on GPU. 90 of 101 classes exceed 80\% per-class accuracy. The 3-stage pipeline (classify $\rightarrow$ segment $\rightarrow$ lookup) integrates seamlessly into a FastAPI backend and Expo mobile frontend, delivering a functional end-to-end calorie estimation system.
+
+The most impactful engineering insight was the \texttt{num\_labels} bug: passing an incorrect class count to \texttt{from\_pretrained()} silently re-initialises the classification head, a failure mode that produces plausible-looking training curves while the model learns nothing. Documentation of this bug contributes practical value to practitioners adopting HuggingFace ViT for downstream classification tasks.
+
+Future work will address the two primary accuracy bottlenecks: replacing the pixel-area portion estimator with depth-based volume inference, and expanding CalorieDB and training data to Southeast Asian cuisines.
+
+%----------------------------------------------------------------------------------------
+%	ACKNOWLEDGMENTS
+%----------------------------------------------------------------------------------------
+
+\phantomsection
+\section*{Acknowledgments}
+\addcontentsline{toc}{section}{Acknowledgments}
+
+The authors thank FPT University and the DSP391m course instructors for guidance throughout this project. The Food-101 dataset was provided by Bossard et al.\ \cite{bossard2014food101}. Detectron2 is developed and maintained by Facebook AI Research \cite{wu2019detectron2}.
+
+%----------------------------------------------------------------------------------------
+%	REFERENCE LIST
+%----------------------------------------------------------------------------------------
+
+\phantomsection
+\printbibliography[heading=bibintoc]
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

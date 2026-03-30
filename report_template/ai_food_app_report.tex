@@ -1,0 +1,423 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% AI-Powered Food Recognition & Calorie Estimation App
+% Project Proposal Report
+% Based on Stylish Article Template
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[fleqn,10pt]{SelfArx} % Document font size and equations flushed left
+
+\usepackage[english]{babel} % Specify a different language here - english by default
+
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern} % Latin Modern font (improved Computer Modern)
+\usepackage[T1]{fontenc}
+\usepackage{tikz} % For logo positioning
+
+% Modern bibliography management
+\usepackage[backend=biber, style=ieee]{biblatex}
+\addbibresource{references.bib}
+
+% Fix URL line breaking in references
+\usepackage{xurl}
+\appto{\bibsetup}{\sloppy}
+
+
+
+%----------------------------------------------------------------------------------------
+%	COLUMNS
+%----------------------------------------------------------------------------------------
+
+\setlength{\columnsep}{0.55cm} % Distance between the two columns of text
+\setlength{\fboxrule}{0.75pt} % Width of the border around the abstract
+
+%----------------------------------------------------------------------------------------
+%	COLORS
+%----------------------------------------------------------------------------------------
+
+\definecolor{color1}{RGB}{0,0,90} % Color of the article title and sections
+\definecolor{color2}{RGB}{0,20,20} % Color of the boxes behind the abstract and headings
+
+%----------------------------------------------------------------------------------------
+%	HYPERLINKS
+%----------------------------------------------------------------------------------------
+
+\usepackage{hyperref} % Required for hyperlinks
+
+\hypersetup{
+	hidelinks,
+	colorlinks,
+	breaklinks=true,
+	urlcolor=color2,
+	citecolor=color1,
+	linkcolor=color1,
+	bookmarksopen=false,
+	pdftitle={AI-Powered Food Recognition and Calorie Estimation App},
+	pdfauthor={Huynh Quoc Trung, Pham Ngo Dinh Khoi, Nhu Quang Anh},
+}
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE INFORMATION
+%----------------------------------------------------------------------------------------
+
+\JournalInfo{FPT University, DSP391m, Spring 2026} % Journal information
+\Archive{{NutriVision-AI}} % Additional notes
+
+\PaperTitle{AI-Powered Food Recognition \& Calorie Estimation App: Introduction \& Problem Statement} % Article title
+
+\Authors{Huynh Quoc Trung - QE180038, Pham Ngo Dinh Khoi - QE180110, Nhu Quang Anh - QE180003} % Authors
+\affiliation{\textit{FPT University, Vietnam}} % Author affiliation
+\affiliation{\textbf{Course}: DSP391m - Data Science Project} % Course information
+
+\Keywords{Food Recognition --- Calorie Estimation --- Swin Transformer --- Monocular Depth Estimation --- Mobile Application --- Computer Vision} % Keywords
+\newcommand{\keywordname}{Keywords} % Defines the keywords heading name
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\Abstract{This project proposes the development of an Android-based mobile application designed to automate dietary assessment using state-of-the-art artificial intelligence. The system utilizes a hybrid AI architecture featuring \textbf{Swin Transformer} for food classification and \textbf{DPF-Nutrition} (Depth Prediction and Fusion) for coin-free volume estimation. Unlike legacy CNN-based approaches, the Swin Transformer captures long-range dependencies across the entire image, achieving classification accuracy of approximately 79.5\% on complex food datasets. The DPF module enables 3D volume estimation from standard 2D photos without requiring reference objects, achieving mass estimation errors as low as 10.6\%. By combining on-device Edge AI (YOLOv8) for real-time detection with Cloud AI for complex analysis, the application functions as a ``Point \& Shoot'' solution that removes the friction of manual calorie logging while maintaining high accuracy.}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Output the title and abstract box
+
+% Add university logo at top left using tikz overlay (after maketitle)
+\begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=north west, inner sep=0pt] at ([xshift=0.5cm, yshift=-0.5cm]current page.north west) {
+        \includegraphics[width=2.5cm]{fpt_uni}
+    };
+\end{tikzpicture}
+
+\tableofcontents % Output the contents section
+
+\thispagestyle{empty} % Removes page numbering from the first page
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\section*{Introduction} % The \section*{} command stops section numbering
+
+\addcontentsline{toc}{section}{Introduction} % Adds this section to the table of contents
+
+\subsection{Project Information}
+
+This project entails the development of an \textbf{Android-based mobile application} designed to automate dietary assessment. The system utilizes a hybrid Artificial Intelligence (AI) architecture, combining on-device Edge AI for real-time detection with Cloud AI for complex analysis, to serve the general ``mass market''.
+
+\subsection{Project Overview}
+
+The core value proposition of this application is removing the friction of manual calorie logging by using computer vision to identify food, estimate portion sizes, and calculate nutritional content from a single photo. By leveraging camera sensors and advanced deep learning models---specifically \textbf{Swin Transformer} for classification and \textbf{DPF-Nutrition} for depth-based volume estimation---the application functions as a ``Point \& Shoot'' solution. The system is designed to transition users from ``Gamified Tracking'' (manual input) to ``Automated Health'' (passive tracking), replicating the visual assessment skills of a dietitian but with the speed and consistency of AI.
+
+%------------------------------------------------
+
+\section{Project Background}
+
+The global landscape for diet and nutrition applications is undergoing a significant transformation, driven by the convergence of smartphone sensor maturity and post-pandemic health consciousness \cite{grandview2024market, mordor2024market}.
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Market Growth:} The global diet and nutrition apps market is projected to grow from approximately USD 2.14 billion in 2024 to USD 4.56 billion by 2030, with aggressive estimates suggesting a value as high as USD 29.3 billion by 2029 \cite{grandview2024industry, businessresearch2025}.
+
+    \item \textbf{Shift in Demand:} While the market is currently dominated by legacy incumbents like MyFitnessPal, these platforms rely heavily on manual search and noisy, user-generated databases \cite{garagegym2026}. There is a growing demand for objective, automated accuracy, with the market shifting toward B2B models where insurers subsidize these apps to mitigate chronic disease costs.
+
+    \item \textbf{Technological Context:} Historically, food recognition relied on Convolutional Neural Networks (CNNs) like ResNet or MobileNet. While efficient, these models struggled with ``global context''---they could see a texture (e.g., rice) but often failed to understand the composition of a full meal. Recent breakthroughs in \textbf{Vision Transformers (ViTs)}, specifically the \textbf{Swin Transformer} \cite{wang2024swin}, have solved these historical blockers. Unlike CNNs, Swin Transformers capture long-range dependencies across the entire image, improving classification accuracy on complex food datasets (like Nutrition5k) to approximately \textbf{79.5\%}. Furthermore, the requirement for physical reference objects (like coins) to estimate food size has been rendered obsolete by \textbf{Monocular Depth Prediction}. New methods, such as \textbf{DPF-Nutrition} \cite{han2023dpf}, use deep learning to generate 3D depth maps from standard 2D photos, achieving mass estimation errors as low as \textbf{10.6\%}.
+\end{itemize}
+
+%------------------------------------------------
+
+\section{Related Work}
+
+The field of automated dietary assessment has evolved significantly over the past decade. Early systems relied on hand-crafted features and Support Vector Machines (SVMs), which were brittle and failed under varying lighting conditions \cite{prenet2024}. The advent of deep learning brought Convolutional Neural Networks (CNNs) like ResNet and EfficientNet, achieving notable improvements on benchmarks such as Food-101 \cite{multimodalfood2024}.
+
+Recent advances in Vision Transformers have pushed accuracy further. Wang et al. \cite{wang2024swin} demonstrated that Swin Transformers outperform CNNs on complex food datasets by capturing global context through shifted window attention. For volume estimation, Han et al. \cite{han2023dpf} introduced DPF-Nutrition, achieving mass estimation errors as low as 10.6\% using monocular depth prediction---eliminating the need for reference objects. Qi et al. \cite{qi2025vif} further improved mixed-dish analysis through Visual-Ingredient Feature Fusion (VIF).
+
+Commercial applications like SnapCalorie utilize LiDAR for high-fidelity volume estimation \cite{nutritioncoaching2025}, while Cal AI prioritizes speed using generic LLMs but suffers from hallucination errors \cite{lifehacker2024}. Our approach synthesizes the accuracy of depth-based methods with the speed of edge AI, addressing the gap between scientific rigor and user experience.
+
+%------------------------------------------------
+
+\section{Project Objective}
+
+The primary objective is to develop a user-friendly mobile application that enables users to track their caloric and macronutrient intake simply by taking photographs of their meals, achieving an estimation accuracy comparable to manual logging but with significantly reduced user effort.
+
+\subsection{Specific Objectives}
+
+\begin{description}
+    \item[Automated Recognition:] To implement a \textbf{Swin Transformer} backbone that accurately detects and classifies multi-item meals, outperforming legacy CNN architectures in recognizing complex food arrangements. The model will be fine-tuned on datasets like Food-101 and Nutrition5k \cite{wang2024swin}.
+
+    \item[Coin-Free Volume Estimation:] To integrate a \textbf{Depth Prediction Module (DPF)} that estimates food volume from a single 2D image without requiring fiducial markers (reference objects) or specialized hardware (LiDAR) \cite{han2023dpf}.
+
+    \item[Visual-Ingredient Fusion:] To utilize ingredient-aware logic that combines visual data with probable ingredient lists to refine calorie calculations for mixed dishes (e.g., stews, curries) \cite{qi2025vif}.
+
+    \item[Calorie Calculation:] To convert visual data into nutritional metrics using the formula:
+          \begin{equation}
+              Volume \times Density = Mass
+              \label{eq:mass}
+          \end{equation}
+          followed by:
+          \begin{equation}
+              Mass \times CalorieFactor = Total\ Calories
+              \label{eq:calories}
+          \end{equation}
+
+    \item[User Retention:] To improve long-term user engagement by reducing the daily logging time from 15--20 minutes to seconds.
+\end{description}
+
+%------------------------------------------------
+
+\section{Problem Statement}
+
+Despite the growing market, the current approach to digital dietary tracking is fundamentally broken due to high friction and low accuracy \cite{lifehacker2024, portionsmaster2024}.
+
+\subsection{Friction \& Abandonment}
+
+Manual entry is the \#1 reason users abandon diet apps \cite{nutriscan2025}. The process of searching for specific items (e.g., ``Chicken Curry'') and guessing weights (e.g., ``200g'') is tedious and cognitively demanding, often taking 15--20 minutes per day. This leads to ``logging fatigue,'' causing users to quit within 2--4 weeks.
+
+\subsection{Data Inaccuracy}
+
+Manual logging is subjective and prone to error. Studies indicate that users underestimate their food intake by \textbf{30--50\%} when logging manually, rendering the resulting data clinically unreliable \cite{nutritioncoaching2025}. Users frequently do not know the ingredients or weights of restaurant meals, leading to significant guesswork.
+
+\subsection{Psychological Harm}
+
+Traditional apps often utilize rigid quantification and ``red-coded'' negative feedback loops, which can induce shame, anxiety, and even trigger relapse in individuals with Eating Disorders (ED) \cite{personalizednutrition2024}.
+
+\subsection{Limitations of Legacy AI Solutions}
+
+Current AI competitors face three critical failures:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Lack of Depth Perception:} Most ``AI'' calorie counters only calculate the 2D area (pixels) of the food. They cannot distinguish between a thin slice of bread and a thick loaf, leading to calorie errors exceeding \textbf{30--40\%} \cite{lifehacker2024}.
+    \item \textbf{Context Blindness:} Older CNN models often misclassify foods in complex lighting or cluttered plates because they focus too narrowly on local textures \cite{sciencedaily2024}.
+    \item \textbf{The ``Coin'' Requirement:} Early attempts at volume estimation required users to place a coin next to their food for scale, which is unhygienic and socially awkward, leading to poor user adoption \cite{modelbased2013}.
+\end{itemize}
+
+\textbf{This project solves these problems} by using \textit{Depth Prediction} to see volume without coins and \textit{Swin Transformers} to understand complex plate contexts.
+
+%------------------------------------------------
+
+\section{Data Phase}
+
+\subsection{Dataset Overview}
+To ensure the robustness of the AI models, we analyzed the \textbf{MM-Food-100K} dataset, a comprehensive collection of 100,000 food records. This dataset serves as a primary resource for understanding real-world food distributions and nutritional variability. It includes detailed metadata such as dish names, ingredients, nutritional profiles, cooking methods, and image properties.
+
+\subsection{Exploratory Data Analysis (EDA)}
+Our analysis of the MM-Food-100K dataset reveals several key characteristics that inform our system design:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Scale \& Quality:} The dataset contains 100,000 records with ten primary features and exhibits high data quality, maintaining over \textbf{98\% completeness}.
+    \item \textbf{Category Distribution:} The data reflects a diverse consumption pattern led by \textbf{Homemade food} (46.6\%) and \textbf{Restaurant food} (35.5\%), followed by Raw vegetables/fruits (9.4\%) and Packaged food/Others (8.5\%). This balance ensures the model is trained on both commercial and home-cooked meals.
+    \item \textbf{Macronutrient Breakdown:} We observed distinct nutritional profiles across categories:
+    \begin{itemize}
+        \item \textbf{Restaurant Food:} Highest average Protein (30.5\%) and Fat (23.9\%) content.
+        \item \textbf{Homemade Food:} Balanced profile with 27.5\% Protein, 22.1\% Fat, and 50.4\% Carbs.
+        \item \textbf{Packaged Food:} Heavy skew towards Carbohydrates (66.9\%) with lower Protein (13.4\%).
+        \item \textbf{Raw Foods:} Dominated by Carbohydrates (86.1\%), largely attributed to natural fiber and sugars in fruits/vegetables.
+    \end{itemize}
+    \item \textbf{Nutritional Correlations:} Strong positive correlations were identified between Total Calories and all three macronutrients (Protein/Fat/Carbs), validating typical biological expectations.
+    \item \textbf{Culinary Diversity:} We identified over \textbf{2,264 unique cooking methods}, ranging from common techniques like \textit{Frying} and \textit{Boiling} to specific preparation styles. This diversity is crucial for training the Swin Transformer to recognize foods in various states of preparation.
+    \item \textbf{Nutritional Baseline:} The average caloric content per dish is approximately \textbf{411 kcal}.
+\end{itemize}
+
+\subsection{Dataset Visualizations}
+
+The following figures illustrate key distributions from our exploratory analysis.
+
+\begin{figure}[!htb]\centering
+	\includegraphics[width=\linewidth]{eda_plot_2}
+	\caption{Distribution of Food Types (left) and Top 10 Cooking Methods (right) in the MM-Food-100K dataset.}
+	\label{fig:food_type_distribution}
+\end{figure}
+
+\begin{figure}[!htb]\centering
+	\includegraphics[width=0.95\linewidth]{eda_plot_3}
+	\caption{Average Nutritional Content (Fat, Protein, Calories, Carbohydrates) by Food Type.}
+	\label{fig:nutritional_profile}
+\end{figure}
+
+\begin{figure}[!htb]\centering
+	\includegraphics[width=0.75\linewidth]{eda_plot_4}
+	\caption{Correlation Matrix of Numerical Variables.}
+	\label{fig:correlation_matrix}
+\end{figure}
+
+%------------------------------------------------
+
+\section{System Architecture \& Inference Workflow}
+
+This section details the technical methodology for the \textbf{Inference Pipeline}, describing how the system processes an image from capture to calorie output.
+
+\begin{figure*}[ht]\centering
+	\includegraphics[width=\linewidth]{DiagramSystemArchitecture}
+	\caption{System Architecture and Inference Workflow: From image capture on the Android Edge Client to final nutrition display via the Cloud Inference Engine.}
+	\label{fig:system_architecture}
+\end{figure*}
+
+\subsection{The Dual-Branch Inference Pipeline}
+
+The inference process is split into two parallel branches (Dual-Branch Architecture) that merge at the final stage.
+
+\textbf{Input:} Single RGB Image (Monocular) captured by the user's Android device.
+
+\subsubsection{Stage 1: Preprocessing}
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Resize \& Normalize:} The image is resized to a standard resolution (e.g., $384 \times 384$ for Swin Transformer).
+    \item \textbf{Color Correction:} Adaptive histogram equalization is applied to correct for restaurant lighting conditions (shadows/glare).
+\end{itemize}
+
+\subsubsection{Stage 2: Branch A -- Recognition (Swin Transformer)}
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Patch Partitioning:} The image is split into small patches (e.g., $4 \times 4$ pixels).
+    \item \textbf{Shifted Window Attention:} The Swin Transformer processes these patches using ``shifted windows.'' This allows the model to analyze specific food items (local attention) while simultaneously understanding the entire plate layout (global attention) \cite{wang2024swin}.
+    \item \textbf{Feature Fusion Module (FFM):} Features from different layers are fused to handle foods of varying scales (e.g., a small dipping sauce vs. a large steak).
+    \item \textbf{Output:} Class labels (e.g., ``Grilled Salmon'', ``Steamed Broccoli'') and 2D Bounding Boxes.
+\end{itemize}
+
+\subsubsection{Stage 3: Branch B -- Volume Estimation (DPF Module)}
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Depth Prediction Transformer (DPT):} The same image is fed into a Dense Prediction Transformer. This model has been trained on RGB-D (Depth) datasets to predict a ``Depth Map'' from a standard photo \cite{han2023dpf}.
+    \item \textbf{Point Cloud Generation:} The 2D image pixels are projected into 3D space using the predicted depth map and the camera's intrinsic matrix (focal length).
+    \item \textbf{Volume Integration:} The system calculates the volume ($cm^3$) of the food object by integrating the ``height'' of every pixel inside the bounding box relative to the plate surface.
+\end{itemize}
+
+\subsubsection{Stage 4: Fusion \& Calculation}
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Density Lookup:} The system matches the classified food (from Stage 2) to a density database (e.g., Rice density $\approx 0.85\ g/cm^3$).
+    \item \textbf{Mass Calculation:} $Mass\ (g) = Volume\ (cm^3) \times Density\ (g/cm^3)$.
+    \item \textbf{Nutrient Lookup:} The calculated mass is cross-referenced with the USDA database to output Calories, Protein, Carbs, and Fat \cite{usdafooddata2024}.
+\end{itemize}
+
+\subsection{Inference Latency \& Optimization}
+
+Due to the computational heaviness of Swin Transformers, the MVP will utilize a hybrid approach:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Lightweight Object Detection (YOLOv8):} Runs on-device (Android) for instant bounding boxes ($<$50ms).
+    \item \textbf{Heavy Classification \& Depth (Swin/DPF):} Runs on Cloud GPU (server-side) for high accuracy ($\sim$500ms latency).
+\end{itemize}
+
+%------------------------------------------------
+
+\section{Significance of the Project}
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Preventative Healthcare:} The transition to automated, AI-driven assessment represents a critical evolution in addressing lifestyle-related chronic diseases like obesity, diabetes, and hypertension \cite{personalizednutrition2024}.
+
+    \item \textbf{Market Opportunity:} There is a high unfulfilled demand for a ``Point \& Shoot'' solution that offers objective accuracy rather than subjective guessing \cite{marketsandmarkets2025}.
+
+    \item \textbf{Inclusive Design:} By training on diverse datasets (Western, Asian, and local cuisines), this project aims to address algorithmic bias, ensuring the tool works effectively for global dietary patterns rather than just Western diets \cite{sciencedaily2024}.
+
+    \item \textbf{Compassionate UX:} The project seeks to pioneer ``Compassionate Design'' in diet apps, focusing on nourishment metrics and neutral feedback rather than shame-inducing restrictions, thereby mitigating the risk of eating disorders.
+\end{itemize}
+
+%------------------------------------------------
+
+\section{Project Scope \& Limitations}
+
+\subsection{Project Scope}
+
+\begin{description}
+    \item[Platform:] Android Mobile Application (Kotlin).
+    \item[Target Audience:] General wellness market; users seeking weight loss or muscle gain.
+    \item[Core Functionality:] ~
+          \begin{itemize}[noitemsep]
+              \item \textbf{Detection:} Swin Transformer + FPN (Feature Pyramid Network) for multi-scale food detection \cite{wang2024swin}.
+              \item \textbf{Classification:} Swin Transformer backbone achieving $\sim$79.5\% accuracy on Nutrition5k dataset.
+              \item \textbf{Volume Estimation:} Monocular Depth Prediction (DPF-Nutrition) --- coin-free, achieving $\sim$10.6\% mass error \cite{han2023dpf}.
+              \item \textbf{Ingredient Fusion:} Visual-Ingredient Feature Fusion (VIF) for mixed dish analysis \cite{qi2025vif}.
+              \item \textbf{Database Integration:} USDA FoodData Central API \cite{usdafooddata2024}.
+          \end{itemize}
+    \item[Privacy:] Implementation of on-device inference (YOLOv8) where possible to protect user privacy.
+\end{description}
+
+\subsection{Limitations}
+
+\begin{itemize}[noitemsep]
+    \item \textbf{The ``Mixed Stew'' Problem:} While \textbf{Visual-Ingredient Feature Fusion (VIF)} \cite{qi2025vif} improves results, the system still struggles with heterogeneous mixtures (e.g., determining the exact oil content in a curry).
+
+    \item \textbf{Occlusion:} Ingredients buried under other foods (e.g., meat inside a burrito) are invisible to the camera and cannot be accounted for without user input.
+
+    \item \textbf{Accuracy Constraints:} Software-based depth estimation has an error margin of \textbf{10--15\%}. While superior to 2D methods, it is not accurate enough for medical insulin dosing for Type 1 Diabetics \cite{han2023dpf}.
+
+    \item \textbf{Disclaimer:} The application provides approximations only. It cannot be used for strict medical diets without user verification, as visual estimation serves as a guide rather than a clinical measurement \cite{ailawyer2024}.
+\end{itemize}
+
+%------------------------------------------------
+
+\section{Pilot Study Strategy}
+
+To validate the system's efficacy before a mass-market launch, a two-phase pilot study will be conducted over a 12-week period.
+
+\subsection{Phase 1: Internal Alpha (Weeks 1--4)}
+\textbf{Objective:} Functional Verification \& Latency Optimization.
+\begin{itemize}[noitemsep]
+    \item \textbf{Participants:} Internal development team and 10 QA testers.
+    \item \textbf{Focus:} Stress-testing the Cloud Inference Engine under varying network conditions (4G vs. Wi-Fi).
+    \item \textbf{Success Criteria:} Server uptime $>99.9\%$ and average inference latency consistently $<2$ seconds.
+\end{itemize}
+
+\subsection{Phase 2: Closed Beta (Weeks 5--12)}
+\textbf{Objective:} User Experience (UX) \& Accuracy Validation.
+\begin{itemize}[noitemsep]
+    \item \textbf{Participants:} 100 volunteer students from FPT University, specifically targeting gym-goers utilizing manual tracking methods (e.g., MyFitnessPal).
+    \item \textbf{Methodology:} A/B testing where Group A uses the AI App and Group B uses manual logging for 4 weeks.
+    \item \textbf{KPIs to Monitor:}
+    \begin{itemize}
+        \item \textbf{Time-to-Log:} Reduction in time spent logging per meal (Target: $<10$ seconds).
+        \item \textbf{Accuracy:} Deviation from ground-truth nutritional values (measured via select control meals).
+        \item \textbf{Retention:} Daily Active Users (DAU) after 30 days.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Project Timeline}
+
+\begin{table}[!htb]
+\centering
+\caption{Project Development Timeline}
+\label{tab:timeline}
+\small
+\begin{tabular}{|p{2.5cm}|c|p{3.5cm}|}
+\hline
+\textbf{Phase} & \textbf{Weeks} & \textbf{Deliverables} \\
+\hline
+Research \& Planning & 1--2 & Literature review, Architecture design \\
+\hline
+Data Preparation & 3--4 & Dataset preprocessing, EDA report \\
+\hline
+Model Development & 5--8 & Swin Transformer \& DPF training \\
+\hline
+App Development & 9--12 & Android app with Edge AI \\
+\hline
+Internal Alpha & 13--16 & Bug fixes, Latency optimization \\
+\hline
+Closed Beta & 17--24 & User testing, Accuracy validation \\
+\hline
+\end{tabular}
+\end{table}
+
+%------------------------------------------------
+
+\phantomsection
+\section*{Acknowledgments} % The \section*{} command stops section numbering
+
+\addcontentsline{toc}{section}{Acknowledgments} % Adds this section to the table of contents
+
+We would like to express our gratitude to FPT University and the DSP391m course instructors for their guidance and support throughout this project proposal.
+
+%----------------------------------------------------------------------------------------
+%	REFERENCE LIST
+%----------------------------------------------------------------------------------------
+
+\phantomsection
+\printbibliography[heading=bibintoc]
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
